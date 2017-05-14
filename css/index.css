@@ -1,0 +1,177 @@
+@media screen and (min-width: 1170px){
+    .reducetexto{
+        font-size: 27px!important;
+    }
+}
+@media screen and (max-width: 1170px){
+    .reducetexto{
+        font-size: 25px!important;
+    }
+}
+@media screen and (max-width: 940px){
+    .reducetexto{
+        font-size: 23px!important;
+    }
+}
+@media screen and (max-width: 940px){
+    .reducetexto{
+        font-size: 21px!important;
+    }
+}
+@media screen and (max-width: 768px){
+    .reducetexto{
+        font-size: 18px!important;
+    }
+}
+body{
+    background-color: #252526;
+}
+
+*{
+
+    font-family: "Agency FB";
+    font-weight: bold;
+    color: white;
+}
+.borde{
+    border:1px solid black;
+}
+.borde2{
+    border:1px solid crimson;
+}
+
+.logo{
+    height:100%;
+    background-image: url("../imgs/logo.png") ;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+/*Algunas clases para colocar elementos personalizadas*/
+.alto50{
+    height: 50px;
+}
+.alinear-vertical{
+    display:flex;
+    align-items: center;
+}
+.alinear50{
+    display:flex;
+    top:25%;
+    align-items: center;
+}
+.alinear-horizontal{
+    display:flex;
+    justify-content: center;
+}
+.altofull{
+    height:100%;
+    flex-wrap: nowrap;
+}
+.alto90{
+    height:50%;
+    flex-wrap: nowrap;
+}
+
+.nopaddingnomargin{
+    margin: 0!important;
+    padding:0!important;
+}
+/*Algunas clases para colocar elementos personalizadas*/
+
+.btn-default2, input.form-control.input-group-btn2,  btn-default2 span{
+    background-color: #1c1c1d;
+    border:1px solid #00aff2;
+}
+
+/*E l menu superior se divide en 3 capas*/
+.navmenu{
+    height: 50px;
+    background-color: #2f2f30;
+}
+.navmenu *{
+    font-family: "Agency FB";
+    font-weight: bold;
+}
+.navmenu div{
+    background-color: #2f2f30;
+}
+.categorias{
+    color: white;
+    height: 100%;
+    font-family: "Agency FB";
+    font-size: xx-large;
+}
+a{
+    color: white!important;
+}
+a:hover{
+
+    font-family: "Agency FB";
+    font-weight: bold;
+    color: #13aeef !important;
+    text-decoration: none;
+}
+.btn-info{
+    background-color: #13aeef !important;
+}
+
+.galeria-imgages{
+    height:300px;
+}
+/*Galería de imagenes principal*/
+
+.back1{
+    background-color: #1c1c1d;
+    background-image: url("../imgs/hayley.jpg");
+    background-size: cover;
+    background-position: center;
+}
+.back2{
+    background-color: #2f2f30 ;
+    background-image: url("../imgs/austin.jpg");
+    background-size: cover;
+    background-position: center;
+
+}
+.back3{
+    background-color: #2f2f30 ;
+    background-image: url("../imgs/nami.jpg");
+    background-size: cover;
+    background-position: center;
+
+}
+.back4{
+    background-color: #2f2f30 ;
+    background-image: url("../imgs/widow.gif");
+    background-size: cover;
+    background-position: center;
+
+}
+/*formas geometricas en imageness*/
+.hexagon{
+    background-color: #2f2f30 ;
+    background-image: url("../imgs/widow.gif");
+    background-size: cover;
+    background-position: center;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+}
+.triangulo{
+    background-color: #2f2f30 ;
+    background-image: url("../imgs/widow.gif");
+    background-size: cover;
+    background-position: center;
+    clip-path: polygon(50% 0%, 100% 0%, 100% 25%);
+}
+
+
+.colortextofooter{
+    color: #636363;
+}
+
+.colortextofooter:hover{
+    color: #13aeef !important;
+}
