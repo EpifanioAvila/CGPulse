@@ -26,10 +26,13 @@
 body{
     background-color: #252526;
 }
-
+a{
+    text-decoration: none!important;
+    font-family: "Agency FB"!important;
+}
 *{
 
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
     font-weight: bold;
     color: white;
 }
@@ -42,7 +45,7 @@ body{
 
 .logo{
     height:100%;
-    background-image: url("../imgs/logo.png") ;
+    background-image: url("../imgs/logoverde.png") ;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -83,7 +86,7 @@ body{
 
 .btn-default2, input.form-control.input-group-btn2,  btn-default2 span{
     background-color: #1c1c1d;
-    border:1px solid #00aff2;
+    border:1px solid #23CF5F;
 }
 
 /*E l menu superior se divide en 3 capas*/
@@ -92,8 +95,35 @@ body{
     background-color: #2f2f30;
 }
 .navmenu *{
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
     font-weight: bold;
+
+}
+.form-control.input-group-btn2{
+    font-family: "Agency FB";
+}
+span.glyphicon.glyphicon-search{
+    color: #23CF5F;
+}
+
+span.glyphicon.glyphicon-search{
+    color: white;
+}
+span.glyphicon.glyphicon-search:hover{
+    color: #23CF5F;
+}
+
+.btn-default:hover{
+    background-color: #1c1c1d;
+    border-color: #23CF5F;
+    color: white!important;
+    font-family: "Agency FB"!important;
+}
+.btn-default:hover{
+    background-color: #1c1c1d;
+    border-color: #23CF5F;
+    color: white!important;
+    font-family: "Agency FB"!important;
 }
 .navmenu div{
     background-color: #2f2f30;
@@ -111,11 +141,11 @@ a:hover{
 
     font-family: "Agency FB";
     font-weight: bold;
-    color: #13aeef !important;
+    color: #23CF5F !important;
     text-decoration: none;
 }
 .btn-info{
-    background-color: #13aeef !important;
+    background-color: #23CF5F !important;
 }
 
 .galeria-imgages{
@@ -167,11 +197,40 @@ a:hover{
     clip-path: polygon(50% 0%, 100% 0%, 100% 25%);
 }
 
-
 .colortextofooter{
     color: #636363;
 }
 
 .colortextofooter:hover{
-    color: #13aeef !important;
+    color: #23CF5F !important;
+}
+.labelFormularioRegistro{
+    font-size:18px;
+}
+.panel-heading{
+
+    font-family: "Agency FB";
+    color: #23CF5F!important;
+    border-color:#23CF5F!important;
+
+    background-color: #1c1c1d!important;
+}
+.panel-default{
+
+    font-family: "Agency FB";
+    background-color: #2f2f30!important;
+    border-color:#23CF5F!important;
+}
+.panel.panel-default.panel-defaulttop5{
+    margin-top:15px;
+}
+.imgouput{
+
+    color:#23CF5F;
+}
+.form-control.input-group-btn2{
+    color: #23CF5F;
+}
+.btn-success {
+    background-color:#23CF5F;
 }
