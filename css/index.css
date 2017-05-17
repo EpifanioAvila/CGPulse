@@ -234,3 +234,20 @@ a:hover{
 .btn-success {
     background-color:#23CF5F;
 }
+.btn-primary{
+    background-color: #1c1c1d!important;
+    border-color:#23CF5F;
+}
+.btn-primary:hover{
+    background-color: #1c1c1d!important;
+    border-color:#23CF5F;
+}
+.btn-primary:active{
+    background-color: #1c1c1d!important;
+    border:2px solid #23cf5f !important;
+}
+.bootstrap-filestyle.input-group input{
+    background-color: #1c1c1d!important;
+
+    border-color:#23CF5F;
+}
