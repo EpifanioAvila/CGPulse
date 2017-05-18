@@ -4,6 +4,7 @@
 function onclick_cargarFormularioRegistro() {
     let cuerpoBase = document.getElementById("cuerpoBase");
         cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
+
 }
 function onclick_cargarFormularioInicioSesion() {
     let cuerpoBase = document.getElementById("cuerpoBase");
@@ -64,7 +65,14 @@ function onclick_registrarUSuario() {
         CONEXIONES,
         data,
         function(data){
-            console.log(data)
+            if(data){
+                console.log("Usuario Registrado correctamente")
+                alert("Usuario Registrado correctamente");
+            }else{
+                console.log("El usuario no se ha podido registrar");
+                alert("El usuario no se ha podido registrar")
+
+            }
         }
     );
 

@@ -251,3 +251,41 @@ a:hover{
 
     border-color:#23CF5F;
 }
+
+.progress-bar{
+    background-color:#23CF5F!important;
+    height:40px;
+    border-radius: 4px;
+}
+.absoluto{
+    position: absolute;
+    z-index: -100;
+    -webkit-transition: *1s;
+    -moz-transition: *1s;
+    -ms-transition: *1s;
+    -o-transition: *1s;
+    transition: *1s;
+}
+.barraflotante{
+    /*border:1px solid crimson;*/
+
+    display: none;
+    margin-top:50px;
+    z-index: 0;
+    position: absolute;
+    width:100vw;
+    z-index: 100;
+}
+.barraflotante > div{
+    top:50px;
+    left: 25%;
+    position: fixed;
+    width:50%;
+    border:1px solid crimson;
+    z-index: 10000;
+}
+.barradeprogresoflotante{
+    background-color: transparent!important;
+    z-index: 10;
+    border: 1px solid black;
+}
