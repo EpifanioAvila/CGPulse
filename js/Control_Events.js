@@ -17,17 +17,23 @@ function onload_main() {
     let cuerpoBase = document.getElementById("cuerpoBase");
 
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
+
+    // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
     cargarLayout(botonesAccesoUsuario,BOTONERAACCESO,uiBotonesAccesoUsuario);
 }
 function onclick_cargaIndex() {
+
     let cuerpoBase = document.getElementById("cuerpoBase");
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
+
+    // $('body').css('cursor', 'progress');
 }
 
 
 function onclick_registrarUSuario() {
 
+    // $('body').css('cursor', 'progress');
     let dato1  = $("#username").val();
     let dato2  = $("#pass1").val();
     let dato4  = $("#name").val();
@@ -45,25 +51,37 @@ function onclick_registrarUSuario() {
 
     let data = {metodo : 'crearUsuario',datos : campos};
 
-    // console.log(dato8.valor);
+    console.log(dato8);
     // console.log(dato11.valor);
-    console.log("caracteres:"+banner.length);
-    $.post(
-        CONEXIONES,
-        data,
-        function(data){
-            if(data==true){
-                // let str = data.replace("\/","/");
-                // console.log(str);
-                console.log(data);
-                console.log("Usuario Registrado correctamente")
-                // alert("Usuario Registrado correctamente");
-            }else{
-                console.log("El usuario no se ha podido registrar");
-                // alert("El usuario no se ha podido registrar")
+    // console.log("caracteres:"+banner.length);
+    let resultpeti =false;
+    let peticion = $.post(
+                        CONEXIONES,
+                        data,
+                        function(data){
+                            $('body').css('cursor', 'initial');
+                            try{
+                                let resultado = JSON.parse(data);
+                                console.log(data);
+                                if(resultado == "0" || resultado == 0){
+                                    alert("El usuario ya existe");
+                                }else{
+                                    if(resultado == "true"){
+                                        resultpeti = true
+                                    }else{
+                                        alert("No se ha podido registrar el usuario en estos momentos.");
+                                    }
+                                }
+                            }catch (e){
+                                alert("Imagen demasiado grande!");
+                            }
 
-            }
+
+                        })
+    .done(function () {
+        if(resultpeti){
+            alert("Usuario registrado correctamente");
         }
-    );
+    });
 
 }
