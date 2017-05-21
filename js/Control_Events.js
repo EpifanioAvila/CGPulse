@@ -11,7 +11,6 @@ function onclick_cargarFormularioInicioSesion() {
     cargarLayout(cuerpoBase,FORMULARIOLOGIN,uiFormularioLogin);
 }
 function onload_main() {
-
     let categoriasYBuscador = document.getElementById("CategoriasYBuscadorBotonera");
     let botonesAccesoUsuario = document.getElementById("botonesAccesoUsuario");
     let cuerpoBase = document.getElementById("cuerpoBase");
@@ -20,7 +19,17 @@ function onload_main() {
 
     // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
-    cargarLayout(botonesAccesoUsuario,BOTONERAACCESO,uiBotonesAccesoUsuario);
+    console.log("cargando botones")
+
+    if(sessionStorage.getItem("userIniciado")){
+        console.log("Iniciado");
+        cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
+
+    }else{
+        console.log("No iniciado")
+        cargarLayout(botonesAccesoUsuario,BOTONERAACCESO,uiBotonesAccesoUsuario);
+
+    }
 }
 function onclick_cargaIndex() {
 
@@ -84,4 +93,28 @@ function onclick_registrarUSuario() {
         }
     });
 
+}
+function onclick_iniciarSesion() {
+    let username = $('#username').val();
+    let pass = $('#pass1').val();
+    let data = {metodo:"iniciarSesion",user:username,pass:pass};
+    $.post(
+        CONEXIONES,
+        data,
+        function (data) {
+            let user = JSON.parse(data);
+            if(user.username!=null){
+                console.log(user)
+                sessionStorage.setItem("userIniciado",data);
+                onload_main();
+
+            }else{
+                alert("Datos incorrectos")
+            }
+    })
+
+}
+function onclick_cargaConfiguracionUsuario() {
+    let cuerpoBase = document.getElementById("cuerpoBase");
+    cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario)
 }

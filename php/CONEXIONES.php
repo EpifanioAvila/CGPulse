@@ -75,8 +75,53 @@ class Usuario
 //    }
 //}
 //
-function iniciarSesión(){
+function iniciarSesion(){
+
+    $user = $_POST['user'];
+    $pass = $_POST['pass'];
+
     $conn = mysqli_connect("localhost","root","","cgplus");
+
+    if(mysqli_connect_errno($conn)){
+        return utf8_encode("Imposible conectarse con la base de datos");
+    }else{
+
+        $query = "SELECT * FROM users where username='$user' AND pass='$pass'";
+
+        $result = mysqli_query($conn,$query);
+
+        if($result){
+
+            $usuario = new Usuario();
+
+            $linea = mysqli_fetch_assoc($result);
+
+                $usuario = new Usuario();
+                $usuario->__set("likes",$linea['likes']);
+                $usuario->__set("username",$linea['username']);
+                $usuario->__set("pass",$linea['pass']);
+                $usuario->__set("email",$linea['email']);
+                $usuario->__set("name",$linea['name']);
+                $usuario->__set("surname",$linea['surname']);
+                $usuario->__set("city",$linea['city']);
+                $usuario->__set("country",$linea['country']);
+                $usuario->__set("bannerimg",$linea['bannerimg']);
+                $usuario->__set("likes",$linea['likes']);
+                $usuario->__set("views",$linea['views']);
+                $usuario->__set("userimg",$linea['userimg']);
+
+
+            mysqli_close($conn);
+
+//                return json_encode($usuario);
+            return json_encode($usuario);
+        }else{
+            mysqli_close($conn);
+            return  json_encode(false);
+        }
+    }
+
+
 }
 function crearUsuario(){
 
@@ -184,6 +229,8 @@ if(isset($_POST['metodo'])) {
             echo crearUsuario();
             break;
         case "cargarUsuario" : echo cargarUsuario();
+            break;
+        case "iniciarSesion" : echo iniciarSesion();
             break;
     }
 }

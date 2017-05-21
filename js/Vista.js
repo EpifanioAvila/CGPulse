@@ -4,8 +4,33 @@
 
 function uiBotonesAccesoUsuario() {
 
+    $(document).ready(function(){
+        $('.dropdown-toggle').dropdown()
+    });
+
     $("#btn-registrarse").on("click",onclick_cargarFormularioRegistro);
     $("#btn-iniciarsesion").on("click",onclick_cargarFormularioInicioSesion);
+
+}
+function uiBotonesAccesoUsuarioIniciado() {
+    console.log("hola3")
+    let user = JSON.parse(sessionStorage.getItem("userIniciado"));
+    $(document).ready(function(){
+        $('.dropdown-toggle').dropdown()
+    });
+    $('#btn-cerrarSesion').on("click",function () {
+        sessionStorage.removeItem("userIniciado");
+        onload_main();
+    });
+    // let username =JSON.parse(sessionStorage.getItem("userIniciado"));
+    // console.log()
+
+    // $('#idbtn-username').on("click",onclick_portfolio);
+    $('#idbtn-username').html(user.username) ;
+    $('#avatarIniciado').css("background-image","url('"+user.userimg+"')");
+    $("#btn-configuracionUser").on("click",onclick_cargaConfiguracionUsuario);
+    // $("#btn-registrarse").on("click",onclick_cargarFormularioRegistro);
+    // $("#btn-iniciarsesion").on("click",onclick_cargarFormularioInicioSesion);
 
 }
 function uiBotonesCategoriasBuscador() {
@@ -17,27 +42,27 @@ function uiCuerpoBase() {
     let data = {metodo:'cargarUsuario'};
     let result = "";
 
-    $.post(
-        CONEXIONES,
-        data,
-        function(data) {
-
-            if (data.length) {
-                let user = JSON.parse(data);
-                // let banner = user;
-
-                // console.log(banner)
-                // console.log(data);
-                for(let i = 0 ; user.length>0; i++){
-                imprimirUser(user[i]);
-                }
-                // result = encodeURI(data);
-                // console.log(result[0])
-            } else {
-                console.log("No se han encontrado usuarios");
-            }
-        }
-    )
+    // $.post(
+    //     CONEXIONES,
+    //     data,
+    //     function(data) {
+    //
+    //         if (data.length) {
+    //             let user = JSON.parse(data);
+    //             // let banner = user;
+    //
+    //             // console.log(banner)
+    //             // console.log(data);
+    //             for(let i = 0 ; user.length>0; i++){
+    //             imprimirUser(user[i]);
+    //             }
+    //             // result = encodeURI(data);
+    //             // console.log(result[0])
+    //         } else {
+    //             console.log("No se han encontrado usuarios");
+    //         }
+    //     }
+    // )
     // .done(function () {
 
         // $('body').css('cursor', 'initial');
@@ -64,6 +89,7 @@ var banner;
 var userimg;
 
 function uiFormularioRegistro() {
+
     $("#formRegistro").submit(function (event) {
         event.preventDefault();
         onclick_registrarUSuario();
@@ -71,13 +97,14 @@ function uiFormularioRegistro() {
     $("#imguser").filestyle();
     $("#banner").filestyle();
     // $("#btn-registro").on("click",onclick_registrarUSuario);
-    $('#imguser').on("change",previsualizar);
-    $('#banner').on("change",previsualizar);
+    $('#imguser').on("change",uiPrevisualizar);
+    $('#banner').on("change",uiPrevisualizar);
+
 
 
 }
 
-function codificar(im,key){
+function uiCodificar(im,key){
     let i=new Image();
 
     $("#barraprogreso").css("display","block");
@@ -128,7 +155,7 @@ function codificar(im,key){
 }
 
 
-function previsualizar(event){
+function uiPrevisualizar(event){
 
 
     $("#capaFlotanteBarraProgreso").css("display","block");
@@ -153,7 +180,7 @@ function previsualizar(event){
         setTimeout(function(){
 
             let im=evt.target.result;
-            codificar(im,idinput);
+            uiCodificar(im,idinput);
 
             $("#capaFlotanteBarraProgreso").css("display","none");
             console.log("codificando")
@@ -163,6 +190,8 @@ function previsualizar(event){
 
 }
 function uiFormularioLogin() {
-
-    $("#btn-iniciarsesion").on("click",onclick_cargarFormularioInicioSesion);
+    $("#btnIniciarSesion").on("click",onclick_iniciarSesion);
+}
+function uiConfiguracionUsuario() {
+    
 }

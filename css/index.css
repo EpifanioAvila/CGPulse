@@ -25,14 +25,15 @@
 }
 body{
     background-color: #252526;
+    min-width: 600px;
 }
-a{
+letras{
     text-decoration: none!important;
-    font-family: "Agency FB"!important;
+    /*font-family: "Agency FB"!important;*/
 }
 *{
 
-    /*font-family: "Agency FB";*/
+    /*!*font-family: "Agency FB";*!*/
     font-weight: bold;
     color: white;
 }
@@ -95,12 +96,12 @@ a{
     background-color: #2f2f30;
 }
 .navmenu *{
-    /*font-family: "Agency FB";*/
+    /*!*font-family: "Agency FB";*!*/
     font-weight: bold;
 
 }
 .form-control.input-group-btn2{
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
 }
 span.glyphicon.glyphicon-search{
     color: #23CF5F;
@@ -117,13 +118,13 @@ span.glyphicon.glyphicon-search:hover{
     background-color: #1c1c1d;
     border-color: #23CF5F;
     color: white!important;
-    font-family: "Agency FB"!important;
+    /*font-family: "Agency FB"!important;*/
 }
 .btn-default:hover{
     background-color: #1c1c1d;
     border-color: #23CF5F;
     color: white!important;
-    font-family: "Agency FB"!important;
+    /*font-family: "Agency FB"!important;*/
 }
 .navmenu div{
     background-color: #2f2f30;
@@ -131,7 +132,7 @@ span.glyphicon.glyphicon-search:hover{
 .categorias{
     color: white;
     height: 100%;
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
     font-size: xx-large;
 }
 a{
@@ -139,7 +140,7 @@ a{
 }
 a:hover{
 
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
     font-weight: bold;
     color: #23CF5F !important;
     text-decoration: none;
@@ -209,7 +210,7 @@ a:hover{
 }
 .panel-heading{
 
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
     color: #23CF5F!important;
     border-color:#23CF5F!important;
 
@@ -217,7 +218,7 @@ a:hover{
 }
 .panel-default{
 
-    font-family: "Agency FB";
+    /*font-family: "Agency FB";*/
     background-color: #2f2f30!important;
     border-color:#23CF5F!important;
 }
@@ -305,4 +306,36 @@ a:hover{
     width:100%;
     height:100%;
 
+}
+/*CSS USUARIO INICIADO*/
+/*BOTONERA SUPERIOR*/
+
+.capacircular{
+    height: 50px;
+    width:50px;
+    border-radius: 100%;
+    border:1px solid #23cf5f;
+    background-image: url("../imgs/hayley.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.btn-group *{
+    /*font-family: "serif"!Important;*/
+    color: white;
+}
+.btn-group *:hover, .btn-group *:active, .btn-group *:focus {
+    /*font-family: "serif"!Important;*/
+    color: #23cf5f;
+    border-color:1px solid #23cf5f !important;
+}
+
+.dropdown-menu{
+    background-color: #1c1c1d!important;
+    border:1px solid #23cf5f !important;
+}
+
+.dropdown-menu a:hover {
+    background-color: #1c1c1d!important;
+    border-color:#23cf5f !important;
 }
