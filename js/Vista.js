@@ -27,6 +27,7 @@ function uiBotonesAccesoUsuarioIniciado() {
 
     // $('#idbtn-username').on("click",onclick_portfolio);
     $('#idbtn-username').html(user.username) ;
+    $('#idbtn-username').on("click",onclick_cargaPortfolioPropietario) ;
     $('#avatarIniciado').css("background-image","url('"+user.userimg+"')");
     $("#btn-configuracionUser").on("click",onclick_cargaConfiguracionUsuario);
     // $("#btn-registrarse").on("click",onclick_cargarFormularioRegistro);
@@ -93,7 +94,7 @@ function uiFormularioRegistro() {
     $("#formRegistro").submit(function (event) {
         event.preventDefault();
         onclick_registrarUSuario();
-    })
+    });
     $("#imguser").filestyle();
     $("#banner").filestyle();
     // $("#btn-registro").on("click",onclick_registrarUSuario);
@@ -193,5 +194,39 @@ function uiFormularioLogin() {
     $("#btnIniciarSesion").on("click",onclick_iniciarSesion);
 }
 function uiConfiguracionUsuario() {
-    
+    $("#formRegistro").submit(function (event) {
+        event.preventDefault();
+        onclick_modificarUsuario();
+    });
+    $("#imguser").filestyle();
+    $("#banner").filestyle();
+    $("#banner").on("change",uiPrevisualizar);
+    $("#userimg").on("change",uiPrevisualizar);
+    // $("#btn-configuradorUsuario").on("click",onclick_modificarUsuario);
+    if(sessionStorage.getItem("userIniciado")){
+    let user = JSON.parse(sessionStorage.getItem("userIniciado"));
+    let dato1   = $("#username").val(user.username);
+    let dato4   = $("#name").val(user.name);
+    let dato5   = $("#surname").val(user.surname);
+    let dato6   = $("#email").val(user.email);
+    let dato7   = $("#city").val(user.city);
+    let dato8   = $("#country").val(user.country);
+    let dato9   = $("#imgprueba").attr("src",user.bannerimg.replace("\/","/"));
+    let dato10   = $("#imgprueba2").attr("src",user.userimg.replace("\/","/"));
+    banner = user.bannerimg;
+    userimg = user.userimg;
+    }
+
+}
+function uiPortfolioBase() {
+    if(sessionStorage.getItem("userIniciado")){
+        let user = JSON.parse(sessionStorage.getItem("userIniciado"));
+        document.getElementById('banner').style.backgroundImage = "url("+user.bannerimg+")";
+        document.getElementById('avatarUsuario').style.backgroundImage = "url("+user.userimg+")";
+        console.log(user.bannerimg)
+        // $('#').val();
+        $('#nombreYApellidos').html(user.name+" "+user.surname);
+        $('#categoria').html();
+        $('#cityCountry').html(user.city+" , "+user.country);
+    }
 }

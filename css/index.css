@@ -27,15 +27,42 @@ body{
     background-color: #252526;
     min-width: 600px;
 }
-letras{
+
+body::-webkit-scrollbar {
+    width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #23CF5F;
+    outline: 1px solid slategrey;
+    border-radius: 10px;
+}
+.btn-success{
+    background-color: #23CF5F!important;
+    color: white;
+    font-weight: bold;
+    font-weight: "Agency FB"!important;
+}
+
+.paddingTop20{
+    padding-top: 20px;
+}
+.letras{
     text-decoration: none!important;
-    /*font-family: "Agency FB"!important;*/
+    font-family: "Agency FB"!important;
 }
 *{
 
     /*!*font-family: "Agency FB";*!*/
     font-weight: bold;
     color: white;
+}
+a{
+    text-decoration: none!important;
 }
 .borde{
     border:1px solid black;
@@ -56,6 +83,9 @@ letras{
 /*Algunas clases para colocar elementos personalizadas*/
 .alto50{
     height: 50px;
+}
+.alto500{
+    height: 400px;
 }
 .alinear-vertical{
     display:flex;
@@ -338,4 +368,17 @@ a:hover{
 .dropdown-menu a:hover {
     background-color: #1c1c1d!important;
     border-color:#23cf5f !important;
+}
+.banner{
+    background-position: 0;
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+.infouser{
+    text-shadow: 1px 4px 8px black;
+}
+.fotoAvatarPorfolio{
+    margin: 20px;
+    width: 150px!important;
+    height:150px!important;
 }

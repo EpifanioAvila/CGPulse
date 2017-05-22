@@ -6,6 +6,8 @@ const CONTROLCOMM = "js/Control_Comm.js";
 const BOTONERAIZQMENUNAV = "htmls/botoneraCategoriasYBuscador.html";
 const BOTONERAACCESO = "htmls/botonesAcceso.html";
 const BOTONERAACCESOINICIADO = "htmls/botonesUsuarioIniciado.html";
+const PORTFOLIOBASE = "htmls/portfolioBase.html";
+
 
 const CUERPOBASE = "htmls/cuerpoBase.html";
 const CONFIGURADORUSUARIO = "htmls/configuradorUsuario.html";

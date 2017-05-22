@@ -75,6 +75,34 @@ class Usuario
 //    }
 //}
 //
+function modificarUsuario(){
+    $iduser = $_POST['datos']['iduser'];
+    $email = $_POST['datos']['email'];
+    $pass = $_POST['datos']['pass'];
+    $name = $_POST['datos']['name'];
+    $surname = $_POST['datos']['surname'];
+    $city = $_POST['datos']['city'];
+    $country = $_POST['datos']['country'];
+    $bannerimg = $_POST['datos']['banner'];
+    $userimg = $_POST['datos']['userimg'];
+    $conn = mysqli_connect("localhost","root","","cgplus");
+    if(mysqli_connect_errno($conn)){
+        return utf8_encode("Imposible conectarse con la base de datos");
+    }else {
+//        $query = "UPDATE * FROM users where bannerimg!='' and userimg!=''";
+
+//        $query = "UPDATE users SET pass='".$pass."' ,email='".$email."' ,name='".$name."' ,surname='".$surname."' ,city='".$city."' ,country='".$country."' ,banner='".$bannerimg."' ,userimg='".$userimg ."' WHERE iduser='".$iduser."'";
+        $query = "UPDATE users SET pass='$pass' , email='$email' , name='$name' , surname='$surname' , city='$city' ,country='$country'  WHERE iduser='$iduser'";
+        $result = mysqli_query($conn,$query);
+        if($result){
+            return json_encode("true");
+
+        }else{
+            return json_encode("false");
+
+        }
+    }
+}
 function iniciarSesion(){
 
     $user = $_POST['user'];
@@ -97,7 +125,7 @@ function iniciarSesion(){
             $linea = mysqli_fetch_assoc($result);
 
                 $usuario = new Usuario();
-                $usuario->__set("likes",$linea['likes']);
+                $usuario->__set("iduser",$linea['iduser']);
                 $usuario->__set("username",$linea['username']);
                 $usuario->__set("pass",$linea['pass']);
                 $usuario->__set("email",$linea['email']);
@@ -231,6 +259,8 @@ if(isset($_POST['metodo'])) {
         case "cargarUsuario" : echo cargarUsuario();
             break;
         case "iniciarSesion" : echo iniciarSesion();
+            break;
+        case "modificarUsuario" : echo modificarUsuario();
             break;
     }
 }

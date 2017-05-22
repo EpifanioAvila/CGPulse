@@ -13,16 +13,16 @@ function onclick_cargarFormularioInicioSesion() {
 function onload_main() {
     let categoriasYBuscador = document.getElementById("CategoriasYBuscadorBotonera");
     let botonesAccesoUsuario = document.getElementById("botonesAccesoUsuario");
-    let cuerpoBase = document.getElementById("cuerpoBase");
-
-    cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
-
+    cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
+    // cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
+    // cargarLayout(PORTFOLIOBASE,cuerpoBase,uiPortfolioBase);
     // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
-    console.log("cargando botones")
 
+    console.log("cargando botones")
     if(sessionStorage.getItem("userIniciado")){
         console.log("Iniciado");
+
         cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
 
     }else{
@@ -117,4 +117,41 @@ function onclick_iniciarSesion() {
 function onclick_cargaConfiguracionUsuario() {
     let cuerpoBase = document.getElementById("cuerpoBase");
     cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario)
+}
+function onclick_modificarUsuario() {
+    // $("#")
+    if(JSON.parse(sessionStorage.getItem("userIniciado"))){
+        let user = JSON.parse(sessionStorage.getItem("userIniciado"));
+        let dato1   = $("#username").val();
+        let dato2   = $("#pass1").val();
+        let dato3   = $("#pass2").val();
+        let dato4   = $("#name").val();
+        let dato5   = $("#surname").val();
+        let dato6   = $("#email").val();
+        let dato7   = $("#city").val();
+        let dato8   = $("#country").val();
+        let dato9   = banner.replace("\/","/");
+        let dato10   = userimg.replace("\/","/");
+        // alert("modificando usuario")
+        let campos = {iduser:user.iduser, username : dato1,pass : dato2,email: dato6, name:dato4, surname:dato5,city:dato7,country:dato8,banner:dato9,userimg:dato10};
+        let data = {metodo:"modificarUsuario",datos:campos};
+        $.post(
+            CONEXIONES,
+            data,
+            function (data) {
+
+                // console.log(JSON.parse(data).replace("\/","/"))
+                if(JSON.parse(data)=="true"){
+                    console.log("Usuario modificado con exito");
+                }else{
+                    console.log("No se ha podido modificar")
+                }
+            })
+    }
+
+}
+function onclick_cargaPortfolioPropietario() {
+    let cuerpoBase = document.getElementById("cuerpoBase");
+    // console.log(cuerpoBase);
+    
 }
