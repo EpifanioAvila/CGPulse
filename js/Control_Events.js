@@ -13,8 +13,7 @@ function onclick_cargarFormularioInicioSesion() {
 function onload_main() {
     let categoriasYBuscador = document.getElementById("CategoriasYBuscadorBotonera");
     let botonesAccesoUsuario = document.getElementById("botonesAccesoUsuario");
-    cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
-    // cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
+    cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
     // cargarLayout(PORTFOLIOBASE,cuerpoBase,uiPortfolioBase);
     // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
@@ -146,12 +145,49 @@ function onclick_modificarUsuario() {
                 }else{
                     console.log("No se ha podido modificar")
                 }
-            })
+            }
+        )
     }
 
 }
-function onclick_cargaPortfolioPropietario() {
-    let cuerpoBase = document.getElementById("cuerpoBase");
-    // console.log(cuerpoBase);
-    
+function onclick_cargarPortfolioPropietario() {
+    cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
+
+}
+function onclick_cargarNuevoProyecto() {
+    cargarLayout(cuerpoBase,FORMULARIONUEVOPROYECTO,uiFormularioNuevoTrabajo);
+
+}
+function onclick_subirProyecto() {
+    if(JSON.parse(sessionStorage.getItem("userIniciado"))) {
+
+        let user = JSON.parse(sessionStorage.getItem("userIniciado"));
+        // console.log(user)
+        let title = $('#title').val();
+        let description = $('#description').val();
+        // console.log(description)
+        let tags = $('#tags').val();
+        let category = $('#category').val();
+        let image = imageproyect;
+
+        let campos = {iduser:user.iduser, title:title, description:description, date:"", likes:0, category:category, tags:tags, image: image}
+        let datos = {metodo: "crearProyecto", datos: campos}
+
+        console.log("hola");
+
+        $.post(
+            CONEXIONES,
+            datos,
+            function (data) {
+                console.log(data)
+                // console.log(JSON.parse(data).replace("\/","/"))
+                if(JSON.parse(data)=="true"){
+                    alert("Proyecto publicado correctamente");
+                }else{
+                    alert("No se ha podido modificar el proyecto en estos momentos")
+                }
+            }
+        )
+
+    }
 }

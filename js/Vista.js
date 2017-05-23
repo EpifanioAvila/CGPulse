@@ -13,7 +13,7 @@ function uiBotonesAccesoUsuario() {
 
 }
 function uiBotonesAccesoUsuarioIniciado() {
-    console.log("hola3")
+
     let user = JSON.parse(sessionStorage.getItem("userIniciado"));
     $(document).ready(function(){
         $('.dropdown-toggle').dropdown()
@@ -22,12 +22,14 @@ function uiBotonesAccesoUsuarioIniciado() {
         sessionStorage.removeItem("userIniciado");
         onload_main();
     });
+    $('#idbtn-username').on("click",onclick_cargarPortfolioPropietario);
+    $('#uploadproyect').on("click",onclick_cargarNuevoProyecto);
     // let username =JSON.parse(sessionStorage.getItem("userIniciado"));
     // console.log()
 
     // $('#idbtn-username').on("click",onclick_portfolio);
     $('#idbtn-username').html(user.username) ;
-    $('#idbtn-username').on("click",onclick_cargaPortfolioPropietario) ;
+    $('#idbtn-username').on("click",onclick_cargarPortfolioPropietario) ;
     $('#avatarIniciado').css("background-image","url('"+user.userimg+"')");
     $("#btn-configuracionUser").on("click",onclick_cargaConfiguracionUsuario);
     // $("#btn-registrarse").on("click",onclick_cargarFormularioRegistro);
@@ -125,6 +127,13 @@ function uiCodificar(im,key){
                 // console.log(canvas.toDataURL().split('base64,')[1]);
                 // let campo = {name:canvas.toDataURL().split('base64,')[1]}
 
+                if(key == "Image"){
+                    imageproyect = canvas.toDataURL("image/jpeg",0.1);
+                    // console.log("Imrpimiendouserimg")
+                    // console.log(userimg)
+                    document.getElementById("imgprueba").setAttribute("src",canvas.toDataURL())
+                    document.getElementById("imgprueba").setAttribute("width","100px")
+                }
                 if(key == "banner"){
                     // banner = canvas.toDataURL().split('base64,')[1];
                     banner = canvas.toDataURL("image/jpeg",0.5);
@@ -157,7 +166,6 @@ function uiCodificar(im,key){
 
 
 function uiPrevisualizar(event){
-
 
     $("#capaFlotanteBarraProgreso").css("display","block");
 
@@ -223,10 +231,42 @@ function uiPortfolioBase() {
         let user = JSON.parse(sessionStorage.getItem("userIniciado"));
         document.getElementById('banner').style.backgroundImage = "url("+user.bannerimg+")";
         document.getElementById('avatarUsuario').style.backgroundImage = "url("+user.userimg+")";
-        console.log(user.bannerimg)
+        console.log()
         // $('#').val();
         $('#nombreYApellidos').html(user.name+" "+user.surname);
         $('#categoria').html();
         $('#cityCountry').html(user.city+" , "+user.country);
+
+        datos = {metodo:"cargarGaleriaUsuario",iduser:user.iduser};
+        $.post(
+            CONEXIONES,
+            datos,
+            function (data) {
+                // console.log(data)
+                let cuerpoBase = document.getElementById("portfolioGallery");
+                cuerpoBase.innerHTML = "";
+                // console.log("gh")
+                let galeria = JSON.parse(data);
+                console.log(galeria[0].image);
+                console.log(galeria[1].image);
+                for(let i = 0; i < galeria.length; i++){
+                    let imagen = galeria[i].image.replace("\/","/");
+                    // console.log("<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' style='background-image:url("+imagen+")'></div>")
+                    cuerpoBase.innerHTML+="<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' style='background-image:url("+imagen+")!important'></div>";
+                }
+                // $('#portfolioGallery').html("<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1 ' background-image='url(`"+galeria[0].image+"´)'></div>");
+                // console.log(galeria[1].image);
+            }
+        )
     }
+}
+function uiFormularioNuevoTrabajo(){
+
+    $("#formRegistro").submit(function (event) {
+        event.preventDefault();
+        onclick_subirProyecto();
+    });
+    // alert("cargando formulario nuevo trabajo");
+    $('#Image').on('change',uiPrevisualizar);
+
 }

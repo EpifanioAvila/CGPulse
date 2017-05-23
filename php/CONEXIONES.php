@@ -55,11 +55,45 @@ class Usuario
 
 
 }
+class ImageGallery
+{
+    // Declaración de una propiedad
+    function __construct()
+    {
+        $a = func_get_args();
+        $i = func_num_args();
+        if (method_exists($this,$f='__construct'.$i)) {
+            call_user_func_array(array($this,$f),$a);
+        }
+    }
+
+    function __construct10($idimage,$iduser,$title,$description,$date,$likes,$views,$category,$tags,$image){
+
+        $this->idimage = $idimage;
+        $this->iduser = $iduser;
+        $this->title =$title;
+        $this->description = $description;
+        $this->date = $date;
+        $this->likes = $likes;
+        $this->views = $views;
+        $this->category = $category;
+        $this->tags = $tags;
+        $this->image= $image;
+
+    }
+    function __set($name, $value)
+    {
+        // TODO: Implement __set() method.
+        $this->$name = $value;
+    }
+
+
+}
 
 
 
 //function guardarDibujo(){
-//    $conn = mysqli_connect("localhost","root","","cgplus");
+//    $conn = mysqli_connect("localhost","root","","cgpulse");
 //    if(mysqli_connect_errno($conn)){
 //        return null;
 //    }else{
@@ -75,6 +109,77 @@ class Usuario
 //    }
 //}
 //
+function cargarGaleriaUsuario(){
+
+    $iduser = $_POST['iduser'];
+
+
+    $conn = mysqli_connect("localhost","root","","cgpulse");
+    if(mysqli_connect_errno($conn)){
+        return utf8_encode("Imposible conectarse con la base de datos");
+    }else {
+
+        $query = "SELECT * FROM images where iduser='$iduser'";
+
+        $result = mysqli_query($conn,$query);
+
+        if($result){
+            $imagenes = [];
+
+            $imagen = new ImageGallery();
+
+            while($linea = mysqli_fetch_assoc($result)){
+            $imagen->__set("idimage",$linea['idimage']);
+            $imagen->__set("iduser",$linea['iduser']);
+            $imagen->__set("title",$linea['title']);
+            $imagen->__set("description",$linea['description']);
+            $imagen->__set("date",$linea['date']);
+            $imagen->__set("likes",$linea['likes']);
+            $imagen->__set("views",$linea['views']);
+            $imagen->__set("category",$linea['category']);
+            $imagen->__set("tags",$linea['tags']);
+            $imagen->__set("image",$linea['image']);
+
+                array_push($imagenes,$imagen);
+            }
+            mysqli_close($conn);
+
+//                return json_encode($usuario);
+            return json_encode($imagenes);
+        }else{
+            mysqli_close($conn);
+            return  json_encode("false");
+        }
+    }
+}
+function crearProyecto(){
+    $iduser = $_POST['datos']['iduser'];
+    $title = $_POST['datos']['title'];
+    $description = $_POST['datos']['description'];
+    $date = $_POST['datos']['date'];
+    $likes =0;
+    $views =0;
+    $category = $_POST['datos']['category'];
+    $tags = $_POST['datos']['tags'];
+    $image = $_POST['datos']['image'];
+
+    $conn = mysqli_connect("localhost","root","","cgpulse");
+    if(mysqli_connect_errno($conn)){
+        return utf8_encode("Imposible conectarse con la base de datos");
+    }else {
+        $query = "INSERT INTO  images(iduser,title,description,date,likes,views,category,tags,image) VALUES ('$iduser','$title','$description','$date','$likes','$views','$category','$tags','$image')";
+
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            return json_encode("true");
+
+        } else {
+            return json_encode("false");
+
+        }
+    }
+//    return json_encode($query);
+}
 function modificarUsuario(){
     $iduser = $_POST['datos']['iduser'];
     $email = $_POST['datos']['email'];
@@ -85,7 +190,7 @@ function modificarUsuario(){
     $country = $_POST['datos']['country'];
     $bannerimg = $_POST['datos']['banner'];
     $userimg = $_POST['datos']['userimg'];
-    $conn = mysqli_connect("localhost","root","","cgplus");
+    $conn = mysqli_connect("localhost","root","","cgpulse");
     if(mysqli_connect_errno($conn)){
         return utf8_encode("Imposible conectarse con la base de datos");
     }else {
@@ -108,7 +213,7 @@ function iniciarSesion(){
     $user = $_POST['user'];
     $pass = $_POST['pass'];
 
-    $conn = mysqli_connect("localhost","root","","cgplus");
+    $conn = mysqli_connect("localhost","root","","cgpulse");
 
     if(mysqli_connect_errno($conn)){
         return utf8_encode("Imposible conectarse con la base de datos");
@@ -155,7 +260,7 @@ function crearUsuario(){
 
     $userdatos = $_POST['datos'];
 
-    $conn = mysqli_connect("localhost","root","","cgplus");
+    $conn = mysqli_connect("localhost","root","","cgpulse");
     if(mysqli_connect_errno($conn)){
         return json_encode("Imposible conectarse con la base de datos");
     }else{
@@ -195,7 +300,7 @@ function crearUsuario(){
 }
 function cargarUsuario(){
 
-    $conn = mysqli_connect("localhost","root","","cgplus");
+    $conn = mysqli_connect("localhost","root","","cgpulse");
     if(mysqli_connect_errno($conn)){
         return utf8_encode("Imposible conectarse con la base de datos");
     }else{
@@ -261,6 +366,10 @@ if(isset($_POST['metodo'])) {
         case "iniciarSesion" : echo iniciarSesion();
             break;
         case "modificarUsuario" : echo modificarUsuario();
+            break;
+        case "crearProyecto" : echo crearProyecto();
+            break;
+        case "cargarGaleriaUsuario" : echo cargarGaleriaUsuario();
             break;
     }
 }
