@@ -8,6 +8,7 @@ const BOTONERAACCESO = "htmls/botonesAcceso.html";
 const BOTONERAACCESOINICIADO = "htmls/botonesUsuarioIniciado.html";
 const PORTFOLIOBASE = "htmls/portfolioBase.html";
 const FORMULARIONUEVOPROYECTO = "htmls/formularioNuevoProyecto.html";
+const PROYECTOBASE = "htmls/proyectoBase.html";
 
 
 const CUERPOBASE = "htmls/cuerpoBase.html";

@@ -16,6 +16,7 @@ function onload_main() {
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
     // cargarLayout(PORTFOLIOBASE,cuerpoBase,uiPortfolioBase);
     // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
+    cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
 
     console.log("cargando botones")
@@ -140,10 +141,14 @@ function onclick_modificarUsuario() {
             function (data) {
 
                 // console.log(JSON.parse(data).replace("\/","/"))
-                if(JSON.parse(data)=="true"){
-                    console.log("Usuario modificado con exito");
+                if(JSON.parse(data)=="false"){
+                    alert("No se ha podido modificar los datos en estos momentos")
                 }else{
-                    console.log("No se ha podido modificar")
+                    sessionStorage.setItem("userIniciado",data);
+                    alert("Usuario modificado con exito");
+                    let cuerpoBase = document.getElementById("cuerpoBase");
+                    cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario);
+
                 }
             }
         )
@@ -190,4 +195,8 @@ function onclick_subirProyecto() {
         )
 
     }
+}
+function onclick_cargarProyecto(event) {
+    let idTarget = event.target;
+    console.log(idTarget);
 }

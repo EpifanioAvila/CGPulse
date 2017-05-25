@@ -22,12 +22,7 @@ function uiBotonesAccesoUsuarioIniciado() {
         sessionStorage.removeItem("userIniciado");
         onload_main();
     });
-    $('#idbtn-username').on("click",onclick_cargarPortfolioPropietario);
     $('#uploadproyect').on("click",onclick_cargarNuevoProyecto);
-    // let username =JSON.parse(sessionStorage.getItem("userIniciado"));
-    // console.log()
-
-    // $('#idbtn-username').on("click",onclick_portfolio);
     $('#idbtn-username').html(user.username) ;
     $('#idbtn-username').on("click",onclick_cargarPortfolioPropietario) ;
     $('#avatarIniciado').css("background-image","url('"+user.userimg+"')");
@@ -236,6 +231,8 @@ function uiPortfolioBase() {
         $('#nombreYApellidos').html(user.name+" "+user.surname);
         $('#categoria').html();
         $('#cityCountry').html(user.city+" , "+user.country);
+        $('#likes-info').html(user.likes);
+        $('#views-info').html(user.views);
 
         datos = {metodo:"cargarGaleriaUsuario",iduser:user.iduser};
         $.post(
@@ -247,12 +244,15 @@ function uiPortfolioBase() {
                 cuerpoBase.innerHTML = "";
                 // console.log("gh")
                 let galeria = JSON.parse(data);
-                console.log(galeria[0].image);
-                console.log(galeria[1].image);
                 for(let i = 0; i < galeria.length; i++){
                     let imagen = galeria[i].image.replace("\/","/");
-                    // console.log("<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' style='background-image:url("+imagen+")'></div>")
-                    cuerpoBase.innerHTML+="<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' style='background-image:url("+imagen+")!important'></div>";
+                    cuerpoBase.innerHTML+=
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+"' onclick='onclick_cargarProyecto(event)' >" +
+                        "</div>";
+                    // console.log(document.getElementById(galeria[i].idimage));
+                    // $('#'+galeria[i].idimage).on("click",function () {
+                    //     onclick_cargarProyecto();
+                    // })
                 }
                 // $('#portfolioGallery').html("<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1 ' background-image='url(`"+galeria[0].image+"´)'></div>");
                 // console.log(galeria[1].image);
@@ -268,5 +268,8 @@ function uiFormularioNuevoTrabajo(){
     });
     // alert("cargando formulario nuevo trabajo");
     $('#Image').on('change',uiPrevisualizar);
+
+}
+function uiProyectoBase(){
 
 }

@@ -91,6 +91,11 @@ a{
     display:flex;
     align-items: center;
 }
+
+.alinear-vertical-abajo{
+    display:flex;
+    align-items: flex-end;
+}
 .alinear50{
     display:flex;
     top:25%;
@@ -179,8 +184,13 @@ a:hover{
     background-color: #23CF5F !important;
 }
 
-.galeria-imgages{
+.galeria-images{
     height:300px;
+
+    background-color: #1c1c1d;
+    background-image: url("../imgs/hayley.jpg");
+    background-size: cover;
+    background-position: center;
 }
 /*Galería de imagenes principal*/
 
@@ -390,4 +400,12 @@ a:hover{
 textarea{
     background-color: #1c1c1d!important;
     border: 1px solid #23cf5f!important;
+}
+.degradado:hover{
+    /*background: rgba(255,255,255,1);*/
+    /*visibility: visible;*/
+
+    background-size: cover!important;
+    background-position: center!important;
+    background: linear-gradient(to bottom, transparent,transparent,black)!important;
 }

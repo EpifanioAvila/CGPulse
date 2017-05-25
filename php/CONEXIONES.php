@@ -109,268 +109,318 @@ class ImageGallery
 //    }
 //}
 //
-function cargarGaleriaUsuario(){
+function cargarProyecto(){
+    $idimage = $_POST['idimage'];
+    $conn = mysqli_connect("localhost","root","","cgpulse");
+    if(mysqli_connect_errno($conn)){
+        return utf8_encode("Imposible conectarse con la base de datos");
+    }else {
+        $query = "SELECT * FROM images WHERE idimage = '$idimage' ";
+        $result = mysqli_query($conn,$query);
+        if($result){
+            $imagen = mysqli_fetch_assoc($result);
+            return json_encode($imagen);
+        }else{
+            return json_encode("false");
+        }
+    }
+
+
+
+}
+function cargarGaleriaUsuario()
+{
 
     $iduser = $_POST['iduser'];
+    $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+    if (mysqli_connect_errno($conn)) {
+        return json_encode("Imposible conectarse con la base de datos");
+    } else {
 
 
-    $conn = mysqli_connect("localhost","root","","cgpulse");
-    if(mysqli_connect_errno($conn)){
-        return utf8_encode("Imposible conectarse con la base de datos");
-    }else {
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
+        } else {
 
-        $query = "SELECT * FROM images where iduser='$iduser'";
+            $query = "SELECT * FROM images where iduser='$iduser' ORDER BY idimage DESC";
 
-        $result = mysqli_query($conn,$query);
+            $result = mysqli_query($conn, $query);
 
-        if($result){
-            $imagenes = [];
+            if ($result) {
+                $imagenes = [];
 
-            $imagen = new ImageGallery();
+                while ($linea = mysqli_fetch_assoc($result)) {
 
-            while($linea = mysqli_fetch_assoc($result)){
-            $imagen->__set("idimage",$linea['idimage']);
-            $imagen->__set("iduser",$linea['iduser']);
-            $imagen->__set("title",$linea['title']);
-            $imagen->__set("description",$linea['description']);
-            $imagen->__set("date",$linea['date']);
-            $imagen->__set("likes",$linea['likes']);
-            $imagen->__set("views",$linea['views']);
-            $imagen->__set("category",$linea['category']);
-            $imagen->__set("tags",$linea['tags']);
-            $imagen->__set("image",$linea['image']);
+                    $imagen = new ImageGallery();
+                    $imagen->__set("idimage", $linea['idimage']);
+                    $imagen->__set("iduser", $linea['iduser']);
+                    $imagen->__set("title", $linea['title']);
+                    $imagen->__set("description", $linea['description']);
+                    $imagen->__set("date", $linea['date']);
+                    $imagen->__set("likes", $linea['likes']);
+                    $imagen->__set("views", $linea['views']);
+                    $imagen->__set("category", $linea['category']);
+                    $imagen->__set("tags", $linea['tags']);
+                    $imagen->__set("image", $linea['image']);
 
-                array_push($imagenes,$imagen);
-            }
-            mysqli_close($conn);
+                    array_push($imagenes, $imagen);
+                    unset($imagen);
+                }
+                mysqli_close($conn);
 
 //                return json_encode($usuario);
-            return json_encode($imagenes);
-        }else{
-            mysqli_close($conn);
-            return  json_encode("false");
+                return json_encode($imagenes);
+            } else {
+                mysqli_close($conn);
+                return json_encode("false");
+            }
         }
     }
 }
-function crearProyecto(){
-    $iduser = $_POST['datos']['iduser'];
-    $title = $_POST['datos']['title'];
-    $description = $_POST['datos']['description'];
-    $date = $_POST['datos']['date'];
-    $likes =0;
-    $views =0;
-    $category = $_POST['datos']['category'];
-    $tags = $_POST['datos']['tags'];
-    $image = $_POST['datos']['image'];
+    function crearProyecto()
+    {
+        $iduser = $_POST['datos']['iduser'];
+        $title = $_POST['datos']['title'];
+        $description = $_POST['datos']['description'];
+        $date = $_POST['datos']['date'];
+        $likes = 0;
+        $views = 0;
+        $category = $_POST['datos']['category'];
+        $tags = $_POST['datos']['tags'];
+        $image = $_POST['datos']['image'];
 
-    $conn = mysqli_connect("localhost","root","","cgpulse");
-    if(mysqli_connect_errno($conn)){
-        return utf8_encode("Imposible conectarse con la base de datos");
-    }else {
-        $query = "INSERT INTO  images(iduser,title,description,date,likes,views,category,tags,image) VALUES ('$iduser','$title','$description','$date','$likes','$views','$category','$tags','$image')";
-
-        $result = mysqli_query($conn, $query);
-        if ($result) {
-            return json_encode("true");
-
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
         } else {
-            return json_encode("false");
+            $query = "INSERT INTO  images(iduser,title,description,date,likes,views,category,tags,image) VALUES ('$iduser','$title','$description','$date','$likes','$views','$category','$tags','$image')";
 
+            $result = mysqli_query($conn, $query);
+            if ($result) {
+                return json_encode("true");
+
+            } else {
+                return json_encode("false");
+
+            }
         }
-    }
 //    return json_encode($query);
-}
-function modificarUsuario(){
-    $iduser = $_POST['datos']['iduser'];
-    $email = $_POST['datos']['email'];
-    $pass = $_POST['datos']['pass'];
-    $name = $_POST['datos']['name'];
-    $surname = $_POST['datos']['surname'];
-    $city = $_POST['datos']['city'];
-    $country = $_POST['datos']['country'];
-    $bannerimg = $_POST['datos']['banner'];
-    $userimg = $_POST['datos']['userimg'];
-    $conn = mysqli_connect("localhost","root","","cgpulse");
-    if(mysqli_connect_errno($conn)){
-        return utf8_encode("Imposible conectarse con la base de datos");
-    }else {
+    }
+
+    function modificarUsuario()
+    {
+        $iduser = $_POST['datos']['iduser'];
+        $email = $_POST['datos']['email'];
+        $pass = $_POST['datos']['pass'];
+        $name = $_POST['datos']['name'];
+        $surname = $_POST['datos']['surname'];
+        $city = $_POST['datos']['city'];
+        $country = $_POST['datos']['country'];
+        $bannerimg = $_POST['datos']['banner'];
+        $userimg = $_POST['datos']['userimg'];
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
+        } else {
 //        $query = "UPDATE * FROM users where bannerimg!='' and userimg!=''";
 
 //        $query = "UPDATE users SET pass='".$pass."' ,email='".$email."' ,name='".$name."' ,surname='".$surname."' ,city='".$city."' ,country='".$country."' ,banner='".$bannerimg."' ,userimg='".$userimg ."' WHERE iduser='".$iduser."'";
-        $query = "UPDATE users SET pass='$pass' , email='$email' , name='$name' , surname='$surname' , city='$city' ,country='$country'  WHERE iduser='$iduser'";
-        $result = mysqli_query($conn,$query);
-        if($result){
-            return json_encode("true");
+            $query = "UPDATE users SET pass='$pass' , email='$email' , name='$name' , surname='$surname' , city='$city' ,country='$country', userimg='$userimg', bannerimg='$bannerimg'  WHERE iduser='$iduser'";
+            $result = mysqli_query($conn, $query);
+            if ($result) {
+                $query = "SELECT * FROM users WHERE iduser ='$iduser'";
+                $result = mysqli_query($conn, $query);
+                $usuario = new Usuario();
 
-        }else{
-            return json_encode("false");
-
-        }
-    }
-}
-function iniciarSesion(){
-
-    $user = $_POST['user'];
-    $pass = $_POST['pass'];
-
-    $conn = mysqli_connect("localhost","root","","cgpulse");
-
-    if(mysqli_connect_errno($conn)){
-        return utf8_encode("Imposible conectarse con la base de datos");
-    }else{
-
-        $query = "SELECT * FROM users where username='$user' AND pass='$pass'";
-
-        $result = mysqli_query($conn,$query);
-
-        if($result){
-
-            $usuario = new Usuario();
-
-            $linea = mysqli_fetch_assoc($result);
+                $linea = mysqli_fetch_assoc($result);
 
                 $usuario = new Usuario();
-                $usuario->__set("iduser",$linea['iduser']);
-                $usuario->__set("username",$linea['username']);
-                $usuario->__set("pass",$linea['pass']);
-                $usuario->__set("email",$linea['email']);
-                $usuario->__set("name",$linea['name']);
-                $usuario->__set("surname",$linea['surname']);
-                $usuario->__set("city",$linea['city']);
-                $usuario->__set("country",$linea['country']);
-                $usuario->__set("bannerimg",$linea['bannerimg']);
-                $usuario->__set("likes",$linea['likes']);
-                $usuario->__set("views",$linea['views']);
-                $usuario->__set("userimg",$linea['userimg']);
+                $usuario->__set("iduser", $linea['iduser']);
+                $usuario->__set("username", $linea['username']);
+                $usuario->__set("pass", $linea['pass']);
+                $usuario->__set("email", $linea['email']);
+                $usuario->__set("name", $linea['name']);
+                $usuario->__set("surname", $linea['surname']);
+                $usuario->__set("city", $linea['city']);
+                $usuario->__set("country", $linea['country']);
+                $usuario->__set("bannerimg", $linea['bannerimg']);
+                $usuario->__set("likes", $linea['likes']);
+                $usuario->__set("views", $linea['views']);
+                $usuario->__set("userimg", $linea['userimg']);
 
 
-            mysqli_close($conn);
+                return json_encode($usuario);
 
-//                return json_encode($usuario);
-            return json_encode($usuario);
-        }else{
-            mysqli_close($conn);
-            return  json_encode(false);
+            } else {
+                return json_encode("false");
+
+            }
         }
     }
 
+    function iniciarSesion()
+    {
 
-}
-function crearUsuario(){
+        $user = $_POST['user'];
+        $pass = $_POST['pass'];
 
-    $userdatos = $_POST['datos'];
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
 
-    $conn = mysqli_connect("localhost","root","","cgpulse");
-    if(mysqli_connect_errno($conn)){
-        return json_encode("Imposible conectarse con la base de datos");
-    }else{
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
+        } else {
+
+            $query = "SELECT * FROM users where username='$user' AND pass='$pass'";
+
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+
+                $usuario = new Usuario();
+
+                $linea = mysqli_fetch_assoc($result);
+
+                $usuario = new Usuario();
+                $usuario->__set("iduser", $linea['iduser']);
+                $usuario->__set("username", $linea['username']);
+                $usuario->__set("pass", $linea['pass']);
+                $usuario->__set("email", $linea['email']);
+                $usuario->__set("name", $linea['name']);
+                $usuario->__set("surname", $linea['surname']);
+                $usuario->__set("city", $linea['city']);
+                $usuario->__set("country", $linea['country']);
+                $usuario->__set("bannerimg", $linea['bannerimg']);
+                $usuario->__set("likes", $linea['likes']);
+                $usuario->__set("views", $linea['views']);
+                $usuario->__set("userimg", $linea['userimg']);
+
+
+                mysqli_close($conn);
+
+//                return json_encode($usuario);
+                return json_encode($usuario);
+            } else {
+                mysqli_close($conn);
+                return json_encode(false);
+            }
+        }
+
+
+    }
+
+    function crearUsuario()
+    {
+
+        $userdatos = $_POST['datos'];
+
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
+        } else {
 
 //        PRIMERO COMPROBAMOS SI EL USUARIO INTRODUCIDO YA EXISTE
 
 //        $query = "SELECT 'true' FROM users where username='".$userdatos['username']."' limit 1";
-        $result="";
-        $query = "SELECT 'true' FROM users where username='".$userdatos['username']."'";
-        $result = mysqli_query($conn,$query);
+            $result = "";
+            $query = "SELECT 'true' FROM users where username='" . $userdatos['username'] . "'";
+            $result = mysqli_query($conn, $query);
 
 //        SI EXISTE DEVUELVE 0 Y DESDE JAVASCRIPT SE TRATA LA RESPUESTA
-        $linea = mysqli_fetch_row($result);
-        if(count($linea)>0){
-            return json_encode("0");
-        }
-        else{
+            $linea = mysqli_fetch_row($result);
+            if (count($linea) > 0) {
+                return json_encode("0");
+            } else {
 //          SI NO EXISTE LO INTENTA CREAR
-            $query = "INSERT INTO users(username, pass, email, name, surname, city, country, bannerimg, likes, views, userimg, role) VALUES ('".$userdatos['username']."','".$userdatos['pass']."','".$userdatos['email']."','".$userdatos['name']."','".$userdatos['surname']."','".$userdatos['city']."','".$userdatos['country']."','".$userdatos['banner']."',".$userdatos['likes'].",".$userdatos['views'].",'".$userdatos['userimg']."','15673')";
+                $query = "INSERT INTO users(username, pass, email, name, surname, city, country, bannerimg, likes, views, userimg, role) VALUES ('" . $userdatos['username'] . "','" . $userdatos['pass'] . "','" . $userdatos['email'] . "','" . $userdatos['name'] . "','" . $userdatos['surname'] . "','" . $userdatos['city'] . "','" . $userdatos['country'] . "','" . $userdatos['banner'] . "'," . $userdatos['likes'] . "," . $userdatos['views'] . ",'" . $userdatos['userimg'] . "','15673')";
 
 //        return json_encode($query);       return json_encode($query);
 
-            $result = mysqli_query($conn,$query);
+                $result = mysqli_query($conn, $query);
 //            SI LO CONSIGUE CREAR DEVUELVE TRUE
 
-            if($result){
-                mysqli_close($conn);
-                return json_encode("true");
-            }else{
+                if ($result) {
+                    mysqli_close($conn);
+                    return json_encode("true");
+                } else {
 //                SI NO LO CONSIGUE CREAR DEVUELVE FALSE
-                mysqli_close($conn);
-                return  json_encode("false");
+                    mysqli_close($conn);
+                    return json_encode("false");
+                }
             }
+
         }
-
     }
-}
-function cargarUsuario(){
 
-    $conn = mysqli_connect("localhost","root","","cgpulse");
-    if(mysqli_connect_errno($conn)){
-        return utf8_encode("Imposible conectarse con la base de datos");
-    }else{
+    function cargarUsuario()
+    {
 
-
-
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
+        } else {
 
 
-        $query = "SELECT * FROM users where bannerimg!='' and userimg!=''";
+            $query = "SELECT * FROM users where bannerimg!='' and userimg!=''";
 //        return json_encode($query);
 //        $query = "INSERT INTO users(username, pass, email, name, surname, city, country, bannerimg, likes, views, userimg) VALUES ('usu1','usu1','usu1','usu1','usu1','usu1','usu1','$bannerimg',0,0,'$userimg')";
 //        return json_encode($query);
 
-//        return json_encode("gilipollas");
-        $result = mysqli_query($conn,$query);
-        $arrayUsers = [];
-            if($result){
-                $usuario = new Usuario();
+            $result = mysqli_query($conn, $query);
+            $arrayUsers = [];
+            if ($result) {
+//                $usuario = new Usuario();
 
-                while($linea = mysqli_fetch_assoc($result)){
+                while ($linea = mysqli_fetch_assoc($result)) {
 
                     $usuario = new Usuario();
-                    $usuario->__set("likes",$linea['likes']);
-                    $usuario->__set("username",$linea['username']);
-                    $usuario->__set("pass",$linea['pass']);
-                    $usuario->__set("email",$linea['email']);
-                    $usuario->__set("name",$linea['name']);
-                    $usuario->__set("surname",$linea['surname']);
-                    $usuario->__set("city",$linea['city']);
-                    $usuario->__set("country",$linea['country']);
-                    $usuario->__set("bannerimg",$linea['bannerimg']);
-                    $usuario->__set("likes",$linea['likes']);
-                    $usuario->__set("views",$linea['views']);
-                    $usuario->__set("userimg",$linea['userimg']);
+                    $usuario->__set("likes", $linea['likes']);
+                    $usuario->__set("username", $linea['username']);
+                    $usuario->__set("pass", $linea['pass']);
+                    $usuario->__set("email", $linea['email']);
+                    $usuario->__set("name", $linea['name']);
+                    $usuario->__set("surname", $linea['surname']);
+                    $usuario->__set("city", $linea['city']);
+                    $usuario->__set("country", $linea['country']);
+                    $usuario->__set("bannerimg", $linea['bannerimg']);
+                    $usuario->__set("likes", $linea['likes']);
+                    $usuario->__set("views", $linea['views']);
+                    $usuario->__set("userimg", $linea['userimg']);
 
-                    array_push($arrayUsers,$usuario);
+                    array_push($arrayUsers, $usuario);
                 }
                 mysqli_close($conn);
 
 //                return json_encode($usuario);
                 return json_encode($arrayUsers);
-            }else{
+            } else {
                 mysqli_close($conn);
-                return  json_encode(false);
+                return json_encode(false);
             }
+        }
     }
-}
-
-
 if(isset($_POST['metodo'])) {
 
-    $metodo = $_POST['metodo'];
+        $metodo = $_POST['metodo'];
 
-    switch ($metodo) {
-        case "guardarDibujo" :
-            echo guardarDibujo();
-            break;
-        case "crearUsuario" :
-            echo crearUsuario();
-            break;
-        case "cargarUsuario" : echo cargarUsuario();
-            break;
-        case "iniciarSesion" : echo iniciarSesion();
-            break;
-        case "modificarUsuario" : echo modificarUsuario();
-            break;
-        case "crearProyecto" : echo crearProyecto();
-            break;
-        case "cargarGaleriaUsuario" : echo cargarGaleriaUsuario();
-            break;
+        switch ($metodo) {
+            case "guardarDibujo" :
+                echo guardarDibujo();
+                break;
+            case "crearUsuario" : echo crearUsuario();
+                break;
+            case "cargarUsuario" : echo cargarUsuario();
+                break;
+            case "iniciarSesion" : echo iniciarSesion();
+                break;
+            case "modificarUsuario" : echo modificarUsuario();
+                break;
+            case "crearProyecto" : echo crearProyecto();
+                break;
+            case "cargarGaleriaUsuario" : echo cargarGaleriaUsuario();
+                break;
+            case "cargarProyect" : echo cargarProyecto();
+                break;
+        }
     }
-}
 ?>
