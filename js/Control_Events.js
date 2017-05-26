@@ -16,7 +16,7 @@ function onload_main() {
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
     // cargarLayout(PORTFOLIOBASE,cuerpoBase,uiPortfolioBase);
     // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
-    cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
+    // cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
 
     console.log("cargando botones")
@@ -132,7 +132,7 @@ function onclick_modificarUsuario() {
         let dato8   = $("#country").val();
         let dato9   = banner.replace("\/","/");
         let dato10   = userimg.replace("\/","/");
-        // alert("modificando usuario")
+
         let campos = {iduser:user.iduser, username : dato1,pass : dato2,email: dato6, name:dato4, surname:dato5,city:dato7,country:dato8,banner:dato9,userimg:dato10};
         let data = {metodo:"modificarUsuario",datos:campos};
         $.post(
@@ -148,6 +148,7 @@ function onclick_modificarUsuario() {
                     alert("Usuario modificado con exito");
                     let cuerpoBase = document.getElementById("cuerpoBase");
                     cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario);
+                    cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
 
                 }
             }
@@ -197,6 +198,19 @@ function onclick_subirProyecto() {
     }
 }
 function onclick_cargarProyecto(event) {
-    let idTarget = event.target;
-    console.log(idTarget);
+    let idTarget = event.target.id;
+    console.log("holis")
+    $.post(
+        CONEXIONES,
+        {metodo:"cargarProyecto",idimage:idTarget},
+        function (data) {
+            if(JSON.parse(data)!="false"){
+                // console.log(data)
+                sessionStorage.setItem("infoproyecto",data);
+                let cuerpoBase = document.getElementById("cuerpoBase");
+                cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
+            }
+
+        }
+    )
 }

@@ -19,18 +19,15 @@ class Prueba
 
 
 }
-class Usuario
-{
+class Usuario{
     // Declaración de una propiedad
-    function __construct()
-{
-    $a = func_get_args();
-    $i = func_num_args();
-    if (method_exists($this,$f='__construct'.$i)) {
-        call_user_func_array(array($this,$f),$a);
+    function __construct(){
+        $a = func_get_args();
+        $i = func_num_args();
+        if (method_exists($this,$f='__construct'.$i)) {
+            call_user_func_array(array($this,$f),$a);
+        }
     }
-}
-
     function __construct12($iduser,$username,$pass,$email,$name,$surname,$city,$country,$bannerimg,$likes,$views,$userimg){
 
             $this->iduser = $iduser;
@@ -113,8 +110,14 @@ function cargarProyecto(){
     $idimage = $_POST['idimage'];
     $conn = mysqli_connect("localhost","root","","cgpulse");
     if(mysqli_connect_errno($conn)){
-        return utf8_encode("Imposible conectarse con la base de datos");
+        return json_encode("Imposible conectarse con la base de datos");
     }else {
+
+        $query = "UPDATE images SET views = views +1 where idimage = '$idimage'";
+        $result = mysqli_query($conn,$query);
+
+//CONSULTA BUENAAAAAAAAAAAA
+//        $query = "select u.*,i.* from users u left outer join images i on i.iduser=u.iduser";
         $query = "SELECT * FROM images WHERE idimage = '$idimage' ";
         $result = mysqli_query($conn,$query);
         if($result){
@@ -419,7 +422,7 @@ if(isset($_POST['metodo'])) {
                 break;
             case "cargarGaleriaUsuario" : echo cargarGaleriaUsuario();
                 break;
-            case "cargarProyect" : echo cargarProyecto();
+            case "cargarProyecto" : echo cargarProyecto();
                 break;
         }
     }
