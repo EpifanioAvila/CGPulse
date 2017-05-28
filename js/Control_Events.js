@@ -45,18 +45,20 @@ function onclick_registrarUSuario() {
     // $('body').css('cursor', 'progress');
     let dato1  = $("#username").val();
     let dato2  = $("#pass1").val();
+    let dato2b  = $("#pass2").val();
     let dato4  = $("#name").val();
     let dato5  = $("#surname").val();
     let dato3  = $("#email").val();
     let dato6  = $("#city").val();
     let dato7  = $("#country").val();
+    let dato12  = $("#category").val();
 
     let dato8 = banner;
     let dato9 = 0;
     let dato10 = 0;
     let dato11 = userimg;
 
-    let campos = { username : dato1,pass : dato2,email: dato3, name:dato4, surname:dato5,city:dato6,country:dato7,banner:dato8,likes:dato9,views:dato10,userimg:dato11};
+    let campos = { username : dato1,pass : dato2,email: dato3, name:dato4, surname:dato5,city:dato6,country:dato7,banner:dato8,likes:dato9,views:dato10,userimg:dato11,category:dato12};
 
     let data = {metodo : 'crearUsuario',datos : campos};
 
@@ -64,34 +66,40 @@ function onclick_registrarUSuario() {
     // console.log(dato11.valor);
     // console.log("caracteres:"+banner.length);
     let resultpeti =false;
-    let peticion = $.post(
-                        CONEXIONES,
-                        data,
-                        function(data){
-                            $('body').css('cursor', 'initial');
-                            try{
-                                let resultado = JSON.parse(data);
-                                console.log(data);
-                                if(resultado == "0" || resultado == 0){
-                                    alert("El usuario ya existe");
-                                }else{
-                                    if(resultado == "true"){
-                                        resultpeti = true
+    if(dato2 != dato2b){
+        alert("La contraseña tiene que coincidir")
+    }else{
+        let peticion = $.post(
+                            CONEXIONES,
+                            data,
+                            function(data){
+                                $('body').css('cursor', 'initial');
+                                try{
+                                    let resultado = JSON.parse(data);
+                                    console.log(data);
+                                    if(resultado == "0" || resultado == 0){
+                                        alert("El usuario ya existe");
                                     }else{
-                                        alert("No se ha podido registrar el usuario en estos momentos.");
+                                        if(resultado == "true"){
+                                            resultpeti = true
+                                        }else{
+                                            alert("Imagen demasiado grande!");
+                                        }
                                     }
+                                }catch (e){
+                                    console.log(dato11);
+                                    console.log(dato8);
+                                    alert("No se ha podido registrar el usuario en estos momentos.");
                                 }
-                            }catch (e){
-                                alert("Imagen demasiado grande!");
-                            }
 
 
-                        })
-    .done(function () {
-        if(resultpeti){
-            alert("Usuario registrado correctamente");
-        }
-    });
+                            })
+        .done(function () {
+            if(resultpeti){
+                alert("Usuario registrado correctamente");
+            }
+        });
+    }
 
 }
 function onclick_iniciarSesion() {
@@ -156,7 +164,11 @@ function onclick_modificarUsuario() {
     }
 
 }
-function onclick_cargarPortfolioPropietario() {
+function onclick_cargarPortfolioPropietario(event) {
+    let target = $(event.target).val();
+    let iduser = target;
+    sessionStorage.setItem("infoUser",iduser);
+
     cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
 
 }
@@ -199,10 +211,13 @@ function onclick_subirProyecto() {
 }
 function onclick_cargarProyecto(event) {
     let idTarget = event.target.id;
-    console.log("holis")
+    let idimage = idTarget.split(",")[0];
+    let iduser = idTarget.split(",")[1];
+    console.log(iduser)
+    console.log(idimage)
     $.post(
         CONEXIONES,
-        {metodo:"cargarProyecto",idimage:idTarget},
+        {metodo:"cargarProyecto",idimage:idimage,iduser:iduser},
         function (data) {
             if(JSON.parse(data)!="false"){
                 // console.log(data)

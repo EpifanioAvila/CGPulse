@@ -24,6 +24,7 @@ function uiBotonesAccesoUsuarioIniciado() {
     });
     $('#uploadproyect').on("click",onclick_cargarNuevoProyecto);
     $('#idbtn-username').html(user.username) ;
+    $('#idbtn-username').val(user.iduser) ;
     $('#idbtn-username').on("click",onclick_cargarPortfolioPropietario) ;
     $('#avatarIniciado').css("background-image","url('"+user.userimg+"')");
     $("#btn-configuracionUser").on("click",onclick_cargaConfiguracionUsuario);
@@ -37,34 +38,34 @@ function uiBotonesCategoriasBuscador() {
 }
 let url = "";
 function uiCuerpoBase() {
-    let data = {metodo:'cargarUsuario'};
-    let result = "";
+    let data = {metodo:'cargarGaleriaMasPopulares'};
 
-    // $.post(
-    //     CONEXIONES,
-    //     data,
-    //     function(data) {
-    //
-    //         if (data.length) {
-    //             let user = JSON.parse(data);
-    //             // let banner = user;
-    //
-    //             // console.log(banner)
-    //             // console.log(data);
-    //             for(let i = 0 ; user.length>0; i++){
-    //             imprimirUser(user[i]);
-    //             }
-    //             // result = encodeURI(data);
-    //             // console.log(result[0])
-    //         } else {
-    //             console.log("No se han encontrado usuarios");
-    //         }
-    //     }
-    // )
-    // .done(function () {
+    $.post(
+        CONEXIONES,
+        data,
+        function(data) {
+
+            if (data.length) {
+                let cuerpoBase = document.getElementById("galeriaprincipal");
+
+                cuerpoBase.innerHTML = "";
+                let galeria = JSON.parse(data);
+                for(let i = 0; i < galeria.length; i++){
+                    let imagen = galeria[i].image.replace("\/","/");
+                    cuerpoBase.innerHTML+=
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(event)' >" +
+                        "</div>";
+                }
+
+            } else {
+                console.log("No se han encontrado usuarios");
+            }
+        }
+    )
+    .done(function () {
 
         // $('body').css('cursor', 'initial');
-    // });
+    });
 }
 function imprimirUser(user){
     let mostrar = false;
@@ -98,8 +99,6 @@ function uiFormularioRegistro() {
     $('#imguser').on("change",uiPrevisualizar);
     $('#banner').on("change",uiPrevisualizar);
 
-
-
 }
 
 function uiCodificar(im,key){
@@ -123,7 +122,7 @@ function uiCodificar(im,key){
                 // let campo = {name:canvas.toDataURL().split('base64,')[1]}
 
                 if(key == "Image"){
-                    imageproyect = canvas.toDataURL("image/jpeg",0.1);
+                    imageproyect = canvas.toDataURL("image/jpeg",0.7);
                     // console.log("Imrpimiendouserimg")
                     // console.log(userimg)
                     document.getElementById("imgprueba").setAttribute("src",canvas.toDataURL())
@@ -131,7 +130,7 @@ function uiCodificar(im,key){
                 }
                 if(key == "banner"){
                     // banner = canvas.toDataURL().split('base64,')[1];
-                    banner = canvas.toDataURL("image/jpeg",0.5);
+                    banner = canvas.toDataURL("image/jpeg",0.7);
                     // console.log("Imrpimiendouserimg")
 
                     // console.log(canvas.toDataURL())
@@ -140,7 +139,7 @@ function uiCodificar(im,key){
 
                 }
                 if(key == "imguser"){
-                    userimg = canvas.toDataURL("image/jpeg",0.1);
+                    userimg = canvas.toDataURL("image/jpeg",0.7);
                     console.log("Imrpimiendouserimg")
                     console.log(userimg)
                     document.getElementById("imgprueba2").setAttribute("src",canvas.toDataURL())
@@ -222,44 +221,54 @@ function uiConfiguracionUsuario() {
 
 }
 function uiPortfolioBase() {
-    if(sessionStorage.getItem("userIniciado")){
-        let user = JSON.parse(sessionStorage.getItem("userIniciado"));
-        document.getElementById('banner').style.backgroundImage = "url("+user.bannerimg+")";
-        document.getElementById('avatarUsuario').style.backgroundImage = "url("+user.userimg+")";
-        console.log()
-        // $('#').val();
-        $('#nombreYApellidos').html(user.name+" "+user.surname);
-        $('#categoria').html();
-        $('#cityCountry').html(user.city+" , "+user.country);
-        $('#likes-info').html(user.likes);
-        $('#views-info').html(user.views);
-
-        datos = {metodo:"cargarGaleriaUsuario",iduser:user.iduser};
+        let iduser=sessionStorage.getItem("infoUser");
+        console.log(iduser)
         $.post(
             CONEXIONES,
-            datos,
+            {metodo:"cargarUsuario",iduser:iduser},
             function (data) {
-                // console.log(data)
-                let cuerpoBase = document.getElementById("portfolioGallery");
-                cuerpoBase.innerHTML = "";
-                // console.log("gh")
-                let galeria = JSON.parse(data);
-                for(let i = 0; i < galeria.length; i++){
-                    let imagen = galeria[i].image.replace("\/","/");
-                    cuerpoBase.innerHTML+=
-                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+"' onclick='onclick_cargarProyecto(event)' >" +
-                        "</div>";
-                    // console.log(document.getElementById(galeria[i].idimage));
-                    // $('#'+galeria[i].idimage).on("click",function () {
-                    //     onclick_cargarProyecto();
-                    // })
+                if(JSON.parse(data)!=null){
+                    let userinfo = JSON.parse(data);
+                    document.getElementById('banner').style.backgroundImage = "url("+userinfo.bannerimg+")";
+                    document.getElementById('avatarUsuario').style.backgroundImage = "url("+userinfo.userimg+")";
+
+                    $('#likes-info').html(userinfo.likes);
+                    $('#views-info').html(userinfo.views);
+
+                    $('#nombreYApellidos').html(userinfo.name+" "+userinfo.surname);
+                    $('#categoria').html(userinfo.category);
+                    $('#cityCountry').html(userinfo.city+" , "+userinfo.country);
+
+                    let datos = {metodo:"cargarGaleriaUsuario",iduser:userinfo.iduser};
+                    $.post(
+                        CONEXIONES,
+                        datos,
+                        function (data) {
+                            let cuerpoBase = document.getElementById("portfolioGallery");
+
+                            cuerpoBase.innerHTML = "";
+                            let galeria = JSON.parse(data);
+                            if(galeria.length==0){
+                                cuerpoBase.innerHTML = "<p class='letras text-center'>Este artista todavía no ha subido nada a su portfolio</p>";
+                            }
+                            for(let i = 0; i < galeria.length; i++){
+                                let imagen = galeria[i].image.replace("\/","/");
+                                cuerpoBase.innerHTML+=
+                                    "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(event)' >" +
+                                    "</div>";
+                            }
+                        }
+                    )
+
+                }else{
+                    alert("No se pueden cargar los datos de este usuario en este momento");
                 }
-                // $('#portfolioGallery').html("<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1 ' background-image='url(`"+galeria[0].image+"´)'></div>");
-                // console.log(galeria[1].image);
             }
         )
-    }
+
 }
+let query = "SELECT * FROM images i LEFT OUTER JOIN users u ON i.iduser = u.iduser;";
+
 function uiFormularioNuevoTrabajo(){
 
     $("#formRegistro").submit(function (event) {
@@ -271,12 +280,19 @@ function uiFormularioNuevoTrabajo(){
 
 }
 function uiProyectoBase(){
-    let proyecto = JSON.parse(sessionStorage.getItem("infoproyecto"));
+    let proyecto = JSON.parse(sessionStorage.getItem("infoproyecto"))
     $("#idViews").html("");
     $("#idViews").html(proyecto.views);
-
     $("#idLikes").html("");
+
     $("#idLikes").html(proyecto.likes);
+    $("#idNombreCompleto").html("");
+
+    $("#idNombreCompleto").html(proyecto.name+" "+proyecto.surname);
+
+    console.log(proyecto.categoryuser)
+    alert(proyecto.categoryuser)
+    $("#idCategoryUser").value = proyecto.categoryuser;
 
     $("#idImagenProyecto").attr('src', '' );
     $("#idImagenProyecto").attr('src',  proyecto.image.replace("\/","/") );
