@@ -165,11 +165,20 @@ function onclick_modificarUsuario() {
 
 }
 function onclick_cargarPortfolioPropietario(event) {
-    let target = $(event.target).val();
+    let target = $(event.target).attr(id);
+    console.log("hola"+$(target))
     let iduser = target;
     sessionStorage.setItem("infoUser",iduser);
 
     cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
+
+}
+function onclick_cargarPortfolio(iduser) {
+
+    sessionStorage.setItem("infoUser",iduser);
+
+    cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
+    console.log("holiwis");
 
 }
 function onclick_cargarNuevoProyecto() {
@@ -220,7 +229,6 @@ function onclick_cargarProyecto(event) {
         {metodo:"cargarProyecto",idimage:idimage,iduser:iduser},
         function (data) {
             if(JSON.parse(data)!="false"){
-                // console.log(data)
                 sessionStorage.setItem("infoproyecto",data);
                 let cuerpoBase = document.getElementById("cuerpoBase");
                 cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
@@ -228,4 +236,5 @@ function onclick_cargarProyecto(event) {
 
         }
     )
+
 }

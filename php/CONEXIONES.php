@@ -448,6 +448,29 @@ function cargarGaleriaUsuario()
             }
         }
     }
+function cargarComentarios()
+{
+    $idimage = $_POST['idimage'];
+    $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+    if (mysqli_connect_errno($conn)) {
+        return json_encode(0);
+    } else {
+
+        $query = "SELECT c.*, u.name, u.surname, u.userimg FROM comments c LEFT OUTER JOIN users u on c.iduser=u.iduser where c.idimage = ".$idimage;
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            $comentarios = Array();
+            while($comentario = mysqli_fetch_assoc($result)){
+                array_push($comentarios,$comentario);
+            }
+            return json_encode($comentarios);
+        } else {
+            mysqli_close($conn);
+            return json_encode("false");
+        }
+    }
+}
 if(isset($_POST['metodo'])) {
 
         $metodo = $_POST['metodo'];
@@ -473,6 +496,8 @@ if(isset($_POST['metodo'])) {
             case "getVisitas" : echo getVisitas();
                 break;
             case "cargarGaleriaMasPopulares" : echo cargarGaleriaMasPoulares();
+                break;
+            case "cargarComentarios" : echo cargarComentarios();
                 break;
         }
     }

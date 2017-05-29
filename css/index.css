@@ -366,7 +366,7 @@ a:hover{
     width:50px;
     border-radius: 100%;
     border:1px solid #23cf5f;
-    background-image: url("../imgs/hayley.jpg");
+    /*background-image: url("../imgs/hayley.jpg");*/
     background-position: center;
     background-size: cover;
 }

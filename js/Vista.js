@@ -25,7 +25,9 @@ function uiBotonesAccesoUsuarioIniciado() {
     $('#uploadproyect').on("click",onclick_cargarNuevoProyecto);
     $('#idbtn-username').html(user.username) ;
     $('#idbtn-username').val(user.iduser) ;
-    $('#idbtn-username').on("click",onclick_cargarPortfolioPropietario) ;
+    $('#idbtn-username').on("click",function () {
+        onclick_cargarPortfolio(user.iduser);
+    }) ;
     $('#avatarIniciado').css("background-image","url('"+user.userimg+"')");
     $("#btn-configuracionUser").on("click",onclick_cargaConfiguracionUsuario);
     // $("#btn-registrarse").on("click",onclick_cargarFormularioRegistro);
@@ -280,19 +282,26 @@ function uiFormularioNuevoTrabajo(){
 
 }
 function uiProyectoBase(){
-    let proyecto = JSON.parse(sessionStorage.getItem("infoproyecto"))
+    let proyecto = JSON.parse(sessionStorage.getItem("infoproyecto"));
     $("#idViews").html("");
     $("#idViews").html(proyecto.views);
+
     $("#idLikes").html("");
-
     $("#idLikes").html(proyecto.likes);
+
     $("#idNombreCompleto").html("");
-
     $("#idNombreCompleto").html(proyecto.name+" "+proyecto.surname);
+    $("#idNombreCompleto").on("click",function () {
+        onclick_cargarPortfolio(proyecto.iduser);
+    });
 
-    console.log(proyecto.categoryuser)
-    alert(proyecto.categoryuser)
-    $("#idCategoryUser").value = proyecto.categoryuser;
+
+
+    $("#avatarPropietarioProyecto").attr('src',  proyecto.userimg.replace("\/","/") );
+
+    $("#avatarPropietarioProyecto").on("click",function () {
+        onclick_cargarPortfolio(proyecto.iduser);
+    })
 
     $("#idImagenProyecto").attr('src', '' );
     $("#idImagenProyecto").attr('src',  proyecto.image.replace("\/","/") );
@@ -304,6 +313,31 @@ function uiProyectoBase(){
     $("#idDescripcionProyecto").html(proyecto.description);
 
     $("#idCategoryUser").html("");
-    $("#idCategoryUser").html(proyecto.category);
+    console.log(proyecto.categoryuser);
+    $("#idCategoryUser").html(proyecto.categoryuser);
+
+    $.post(
+        CONEXIONES,
+        {metodo:"cargarComentarios",idimage:proyecto.idimage},
+        function (data) {
+            document.getElementById("idCajaComentarios").innerHTML="";
+            if(JSON.parse(data).length){
+                let comentarios = JSON.parse(data);
+
+                $("#idCategoryUser").html("");
+                $("#idNumComments").html(comentarios.length);
+                for(let i=0;i<comentarios.length;i++){
+                    document.getElementById("idCajaComentarios").innerHTML+="<div class='row comentario' value='"+comentarios[i].iduser+"'><div class='col-xs-4 capacircular nopaddingnomargin' style='background-image:url("+comentarios[i]['userimg']+")'></div><div class='col-xs-8'  onclick='onclick_cargarPortfolio(`"+comentarios[i].iduser+"`)'>"+comentarios[i].name+""+comentarios[i].surname+"</div><span class='col-xs-8 nopaddingnomargin letras' id='"+comentarios[i]['idcomment']+"'>"+comentarios[i]['comment']+"</span></div><div class='comentariopalo '></div>";
+
+                }
+            }else{
+
+                $("#idCategoryUser").html("");
+                $("#idNumComments").html(0);
+                document.getElementById("idCajaComentarios").innerHTML="<h4 class='row comentario letras'>Este proyecto todavía no tiene ningún comentario, sé el primero en comentar!</h4>";
+            }
+
+        }
+    )
 
 }
