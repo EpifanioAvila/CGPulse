@@ -163,13 +163,11 @@ function cargarProyecto(){
     if(mysqli_connect_errno($conn)){
         return json_encode("Imposible conectarse con la base de datos");
     }else {
+//
+//        $query = "UPDATE images i, users u SET i.views = i.views +1 , u.views = u.views +1 where i.idimage = '$idimage' AND u.iduser=i.iduser ";
+//        $result = mysqli_query($conn,$query);
 
-        $query = "UPDATE images i, users u SET i.views = i.views +1 , u.views = u.views +1 where i.idimage = '$idimage' AND u.iduser=i.iduser ";
-        $result = mysqli_query($conn,$query);
-
-//CONSULTA BUENAAAAAAAAAAAA
-//        $query = "SELECT * FROM images WHERE idimage = '$idimage' ";
-        $query = "select u.name, u.surname, u.userimg, u.category as categoryuser, i.* from users u left outer join images i on i.iduser=u.iduser where idimage='$idimage'";
+        $query = "select u.name, u.surname,  u.userimg,  i.* from users u left outer join images i on i.iduser=u.iduser where idimage='$idimage'";
         $result = mysqli_query($conn,$query);
         if($result){
             $imagen = mysqli_fetch_assoc($result);
@@ -237,7 +235,7 @@ function cargarGaleriaUsuario()
         $iduser = $_POST['datos']['iduser'];
         $title = $_POST['datos']['title'];
         $description = $_POST['datos']['description'];
-        $date = $_POST['datos']['date'];
+        $date = date("m.d.y"); ;
         $likes = 0;
         $views = 0;
         $category = $_POST['datos']['category'];
@@ -471,6 +469,84 @@ function cargarComentarios()
         }
     }
 }
+function daleALike(){
+    $iduser = $_POST['iduser'];
+    $idimage = $_POST['idimage'];
+    $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+    if (mysqli_connect_errno($conn)) {
+        return json_encode(0);
+    } else {
+        $result ="";
+        $query = "SELECT idlike from likes where idimage='$idimage' and iduser='$iduser'";
+        $result = mysqli_query($conn, $query);
+        $resultados = mysqli_fetch_row($result);
+        if ($resultados[0]!=null) {
+//            return json_encode("Se ha encontrado el like");
+            $idlike = $resultados[0];
+
+            $query = "DELETE FROM `likes` WHERE idlike='$idlike'";
+//
+            $result = mysqli_query($conn, $query);
+            if($result){
+                $query  = "UPDATE users SET likes=likes-1 where iduser='$iduser'";
+                mysqli_query($conn,$query);
+
+
+                $query  = "UPDATE images SET likes=likes-1 where idimage='$idimage'";
+                mysqli_query($conn,$query);
+
+
+                mysqli_close($conn);
+                return json_encode("Unlike");
+            }else{
+                mysqli_close($conn);
+                return json_encode("No se ha podido borrar");
+            }
+
+        }else{
+
+//            return json_encode("No se encuentra ");
+            $query = "INSERT INTO likes(idimage,iduser) VALUES ('$idimage','$iduser') ";
+            $result = mysqli_query($conn, $query);
+            if ($result){
+
+                $query  = "UPDATE users SET likes=likes+1 where iduser='$iduser'";
+                mysqli_query($conn,$query);
+
+                $query  = "UPDATE images SET likes=likes+1 where idimage='$idimage'";
+                mysqli_query($conn,$query);
+
+
+                mysqli_close($conn);
+                return json_encode("Insertada Correctamente".$query );
+            }
+        }
+
+    }
+
+}
+function aniadirComentario(){
+    $idimage = $_POST['idimage'];
+    $iduser = $_POST['iduser'];
+    $comment = $_POST['comentario'];
+    $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+    if (mysqli_connect_errno($conn)) {
+        return json_encode(0);
+    } else {
+
+        $query = "INSERT INTO comments(idimage,iduser,comment) VALUES ('$idimage','$iduser','$comment')";
+
+        $result = mysqli_query($conn, $query);
+
+        if($result){
+            return json_encode("true");
+        }else{
+            return json_encode("false");
+        }
+
+    }
+
+}
 if(isset($_POST['metodo'])) {
 
         $metodo = $_POST['metodo'];
@@ -498,6 +574,11 @@ if(isset($_POST['metodo'])) {
             case "cargarGaleriaMasPopulares" : echo cargarGaleriaMasPoulares();
                 break;
             case "cargarComentarios" : echo cargarComentarios();
+                break;
+            case "daleALike" : echo daleALike();
+                break;
+
+            case "aniadirComentario" : echo aniadirComentario();
                 break;
         }
     }

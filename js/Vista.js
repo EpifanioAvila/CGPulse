@@ -283,8 +283,12 @@ function uiFormularioNuevoTrabajo(){
 }
 function uiProyectoBase(){
     let proyecto = JSON.parse(sessionStorage.getItem("infoproyecto"));
+    console.log("proyecto")
+    console.log(proyecto)
     $("#idViews").html("");
     $("#idViews").html(proyecto.views);
+
+    $("#btn-aniadirComentario").attr("disabled",true);
 
     $("#idLikes").html("");
     $("#idLikes").html(proyecto.likes);
@@ -313,8 +317,61 @@ function uiProyectoBase(){
     $("#idDescripcionProyecto").html(proyecto.description);
 
     $("#idCategoryUser").html("");
-    console.log(proyecto.categoryuser);
+
     $("#idCategoryUser").html(proyecto.categoryuser);
+    $("#btn-pulgararriba").addClass("btn-success")
+    $("#btn-pulgararriba").removeClass("btn-default")
+    if(JSON.parse(sessionStorage.getItem("userIniciado")!=null)){
+        let user =JSON.parse(sessionStorage.getItem("userIniciado"));
+        $("#btn-pulgararriba").on("click",function () {
+
+
+            console.log("userid"+user.iduser + " idimage"+proyecto.idimage)
+            $.post(
+                CONEXIONES,
+                {metodo:"daleALike",iduser:proyecto.iduser,idimage:proyecto.idimage},
+                function (data) {
+                    console.log(data);
+                }
+            )
+        });
+
+        $("#idNuevoComentario").on("change",function () {
+            if( $(this).val().trim()!=""){
+
+                $('#btn-aniadirComentario').removeAttr("disabled");
+            }else{
+
+                $("#btn-aniadirComentario").attr("disabled",true);
+            }
+        });
+        $('#btn-aniadirComentario').on("click",function () {
+            let comentario = $("#idNuevoComentario").val();
+            // alert("guardando comentario : "+comentario)
+            $.post(
+                CONEXIONES,
+                {metodo:"aniadirComentario",idimage:proyecto.idimage,iduser:user.iduser,comentario:comentario},
+                function (data) {
+                    let respuesta =JSON.parse(data);
+                    if(respuesta == "true"){
+
+                        let cuerpoBase = document.getElementById("cuerpoBase");
+                        cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
+                    }else{
+                        alert("no se ha podido publicar el comentario en estos momentos");
+                    }
+                }
+            );
+        });
+
+
+        // this.css("background-color","#23CF5F!important")
+    }else{
+
+        $("#btn-pulgararriba").on("click",function () {
+           alert("Inicia sesión o regístrate para poder dar a me gusta");
+        });
+    }
 
     $.post(
         CONEXIONES,
@@ -327,12 +384,11 @@ function uiProyectoBase(){
                 $("#idCategoryUser").html("");
                 $("#idNumComments").html(comentarios.length);
                 for(let i=0;i<comentarios.length;i++){
-                    document.getElementById("idCajaComentarios").innerHTML+="<div class='row comentario' value='"+comentarios[i].iduser+"'><div class='col-xs-4 capacircular nopaddingnomargin' style='background-image:url("+comentarios[i]['userimg']+")'></div><div class='col-xs-8'  onclick='onclick_cargarPortfolio(`"+comentarios[i].iduser+"`)'>"+comentarios[i].name+""+comentarios[i].surname+"</div><span class='col-xs-8 nopaddingnomargin letras' id='"+comentarios[i]['idcomment']+"'>"+comentarios[i]['comment']+"</span></div><div class='comentariopalo '></div>";
+                    document.getElementById("idCajaComentarios").innerHTML+="<div class='row comentario' value='"+comentarios[i].iduser+"'><div class='col-xs-4 capacircular nopaddingnomargin' style='background-image:url("+comentarios[i]['userimg']+")'></div><div class='col-xs-8'  onclick='onclick_cargarPortfolio(`"+comentarios[i].iduser+"`)'>"+comentarios[i].name+""+comentarios[i].surname+"</div><span class='col-xs-8 nopaddingnomargin letras' id='"+comentarios[i]['idcomment']+"'><h4>"+comentarios[i]['comment']+"</h4></span></div><div class='comentariopalo '></div>";
 
                 }
             }else{
 
-                $("#idCategoryUser").html("");
                 $("#idNumComments").html(0);
                 document.getElementById("idCajaComentarios").innerHTML="<h4 class='row comentario letras'>Este proyecto todavía no tiene ningún comentario, sé el primero en comentar!</h4>";
             }

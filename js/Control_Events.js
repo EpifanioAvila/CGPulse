@@ -229,6 +229,7 @@ function onclick_cargarProyecto(event) {
         {metodo:"cargarProyecto",idimage:idimage,iduser:iduser},
         function (data) {
             if(JSON.parse(data)!="false"){
+                console.log(JSON.parse(data));
                 sessionStorage.setItem("infoproyecto",data);
                 let cuerpoBase = document.getElementById("cuerpoBase");
                 cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
