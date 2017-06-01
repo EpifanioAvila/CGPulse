@@ -39,7 +39,7 @@ function uiBotonesCategoriasBuscador() {
     $("#logo").on("click",onclick_cargaIndex);
 }
 let url = "";
-function uiCuerpoBase() {
+function uiGaleriaPrincipal() {
     let data = {metodo:'cargarGaleriaMasPopulares'};
 
     $.post(
@@ -55,7 +55,39 @@ function uiCuerpoBase() {
                 for(let i = 0; i < galeria.length; i++){
                     let imagen = galeria[i].image.replace("\/","/");
                     cuerpoBase.innerHTML+=
-                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(event)' >" +
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                        "</div>";
+                }
+
+            } else {
+                console.log("No se han encontrado usuarios");
+            }
+        }
+    )
+}
+function uiCuerpoBase() {
+    $('a[href$="#galeriaprincipal"]').on("click",function(){
+        uiGaleriaPrincipal();
+    });
+    $('a[href$="#galeriaprincipal"]').on("click",function(){
+        uiGaleriaPrincipal();
+    });
+    let data = {metodo:'cargarGaleriaMasPopulares'};
+
+    $.post(
+        CONEXIONES,
+        data,
+        function(data) {
+
+            if (data.length) {
+                let cuerpoBase = document.getElementById("galeriaprincipal");
+
+                cuerpoBase.innerHTML = "";
+                let galeria = JSON.parse(data);
+                for(let i = 0; i < galeria.length; i++){
+                    let imagen = galeria[i].image.replace("\/","/");
+                    cuerpoBase.innerHTML+=
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
                         "</div>";
                 }
 
@@ -255,9 +287,24 @@ function uiPortfolioBase() {
                             }
                             for(let i = 0; i < galeria.length; i++){
                                 let imagen = galeria[i].image.replace("\/","/");
-                                cuerpoBase.innerHTML+=
-                                    "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(event)' >" +
-                                    "</div>";
+                                if(JSON.parse(sessionStorage.getItem("userIniciado"))){
+
+                                    if(JSON.parse(sessionStorage.getItem("userIniciado")).iduser==iduser){
+
+                                        cuerpoBase.innerHTML+=
+                                            "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin   alinear-horizontal-derecha' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' ><div class='btn btn-danger' onclick='onclick_borrarProyecto("+galeria[i].idimage.trim()+","+galeria[i].iduser+")'>X</div>" +
+                                            "</div>";
+                                    }else{
+
+                                        cuerpoBase.innerHTML+=
+                                            "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin ' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                                            "</div>";
+                                    }
+                                }else{
+                                    cuerpoBase.innerHTML+=
+                                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin ' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                                        "</div>";
+                                }
                             }
                         }
                     )
@@ -283,8 +330,8 @@ function uiFormularioNuevoTrabajo(){
 }
 function uiProyectoBase(){
     let proyecto = JSON.parse(sessionStorage.getItem("infoproyecto"));
-    console.log("proyecto")
-    console.log(proyecto)
+    // console.log("proyecto")
+    // console.log(proyecto)
     $("#idViews").html("");
     $("#idViews").html(proyecto.views);
 
@@ -317,8 +364,11 @@ function uiProyectoBase(){
     $("#idDescripcionProyecto").html(proyecto.description);
 
     $("#idCategoryUser").html("");
-
     $("#idCategoryUser").html(proyecto.categoryuser);
+    $("#idFechaSubidaProyecto").html("Posted on " + proyecto.date);
+
+
+
     $("#btn-pulgararriba").addClass("btn-success")
     $("#btn-pulgararriba").removeClass("btn-default")
     if(JSON.parse(sessionStorage.getItem("userIniciado")!=null)){
@@ -329,9 +379,12 @@ function uiProyectoBase(){
             console.log("userid"+user.iduser + " idimage"+proyecto.idimage)
             $.post(
                 CONEXIONES,
-                {metodo:"daleALike",iduser:proyecto.iduser,idimage:proyecto.idimage},
+                {metodo:"daleALike",iduserliked:proyecto.iduser,iduserlike:user.iduser,idimage:proyecto.idimage},
                 function (data) {
-                    console.log(data);
+                    console.log("recargando")
+                    let cuerpoBase = document.getElementById("cuerpoBase");
+                    cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
+                    onclick_cargarProyecto(proyecto.idimage+","+proyecto.iduser)
                 }
             )
         });
@@ -381,7 +434,6 @@ function uiProyectoBase(){
             if(JSON.parse(data).length){
                 let comentarios = JSON.parse(data);
 
-                $("#idCategoryUser").html("");
                 $("#idNumComments").html(comentarios.length);
                 for(let i=0;i<comentarios.length;i++){
                     document.getElementById("idCajaComentarios").innerHTML+="<div class='row comentario' value='"+comentarios[i].iduser+"'><div class='col-xs-4 capacircular nopaddingnomargin' style='background-image:url("+comentarios[i]['userimg']+")'></div><div class='col-xs-8'  onclick='onclick_cargarPortfolio(`"+comentarios[i].iduser+"`)'>"+comentarios[i].name+""+comentarios[i].surname+"</div><span class='col-xs-8 nopaddingnomargin letras' id='"+comentarios[i]['idcomment']+"'><h4>"+comentarios[i]['comment']+"</h4></span></div><div class='comentariopalo '></div>";

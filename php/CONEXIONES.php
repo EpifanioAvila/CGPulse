@@ -137,6 +137,54 @@ function cargarGaleriaMasPoulares(){
         }
     }
 }
+function cargarGaleriaMasVisitados(){
+
+    $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+    if (mysqli_connect_errno($conn)) {
+        return json_encode("Imposible conectarse con la base de datos");
+    } else {
+
+
+        $conn = mysqli_connect("localhost", "root", "", "cgpulse");
+        if (mysqli_connect_errno($conn)) {
+            return json_encode("Imposible conectarse con la base de datos");
+        } else {
+
+            $query = "SELECT * FROM images ORDER BY views DESC";
+
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                $imagenes = [];
+
+                while ($linea = mysqli_fetch_assoc($result)) {
+
+                    $imagen = new ImageGallery();
+                    $imagen->__set("idimage", $linea['idimage']);
+                    $imagen->__set("iduser", $linea['iduser']);
+                    $imagen->__set("title", $linea['title']);
+                    $imagen->__set("description", $linea['description']);
+                    $imagen->__set("date", $linea['date']);
+                    $imagen->__set("likes", $linea['likes']);
+                    $imagen->__set("views", $linea['views']);
+                    $imagen->__set("category", $linea['category']);
+                    $imagen->__set("tags", $linea['tags']);
+                    $imagen->__set("image", $linea['image']);
+
+                    array_push($imagenes, $imagen);
+                    unset($imagen);
+                }
+                mysqli_close($conn);
+
+//                return json_encode($usuario);
+                return json_encode($imagenes);
+            } else {
+                mysqli_close($conn);
+                return json_encode("false");
+            }
+        }
+    }
+}
 function getVisitas(){
     $conn = mysqli_connect("localhost","root","","cgpulse");
     if(mysqli_connect_errno($conn)){
@@ -164,10 +212,10 @@ function cargarProyecto(){
         return json_encode("Imposible conectarse con la base de datos");
     }else {
 //
-//        $query = "UPDATE images i, users u SET i.views = i.views +1 , u.views = u.views +1 where i.idimage = '$idimage' AND u.iduser=i.iduser ";
-//        $result = mysqli_query($conn,$query);
+        $query = "UPDATE images i, users u SET i.views = i.views +1 , u.views = u.views +1 where i.idimage = '$idimage' AND u.iduser=i.iduser ";
+        $result = mysqli_query($conn,$query);
 
-        $query = "select u.name, u.surname,  u.userimg,  i.* from users u left outer join images i on i.iduser=u.iduser where idimage='$idimage'";
+        $query = "select u.name, u.surname,u.category as categoryuser,  u.userimg,  i.* from users u left outer join images i on i.iduser=u.iduser where i.idimage='$idimage'";
         $result = mysqli_query($conn,$query);
         if($result){
             $imagen = mysqli_fetch_assoc($result);
@@ -175,6 +223,64 @@ function cargarProyecto(){
         }else{
             return json_encode("false");
         }
+    }
+
+
+
+}
+function borrarProyecto(){
+    $idimage = $_POST['idimage'];
+    $iduser = $_POST['iduser'];
+    $conn = mysqli_connect("localhost","root","","cgpulse");
+    if(mysqli_connect_errno($conn)){
+        return json_encode("Imposible conectarse con la base de datos");
+    }else {
+
+        $query = "select count(*) from likes where idimage ='$idimage'";
+        $result = mysqli_query($conn,$query);
+        $likes = mysqli_fetch_row($result)[0];
+
+        $query = "DELETE from comments where idimage ='$idimage'";
+        $result = mysqli_query($conn,$query);
+
+        $query = "DELETE from likes where idimage ='$idimage'";
+        $result = mysqli_query($conn,$query);
+
+
+        $query = "select views from images where idimage ='$idimage'";
+        $result = mysqli_query($conn,$query);
+        $views = mysqli_fetch_row($result)[0];
+
+        $query = "DELETE from images where idimage ='$idimage'";
+        $result = mysqli_query($conn,$query);
+
+        $query = "UPDATE users SET views = views - $views, likes = likes - $likes where iduser='$iduser'";
+        $result = mysqli_query($conn,$query);
+        if($result){
+            return json_encode("true");
+        }else{
+            return json_encode("false");
+
+        }
+
+
+//        $resultados = Array();
+//        while($linea = mysqli_fetch_assoc($result)){
+//            array_push($resultados,$linea);
+//        }
+////        return json_encode($resultados);
+//
+//        $query = "UPDATE images i, users u SET i.views = i.views +1 , u.views = u.views +1 where i.idimage = '$idimage' AND u.iduser=i.iduser ";
+//        $result = mysqli_query($conn,$query);
+//
+//        $query = "select u.name, u.surname,u.category as categoryuser,  u.userimg,  i.* from users u left outer join images i on i.iduser=u.iduser where i.idimage='$idimage'";
+//        $result = mysqli_query($conn,$query);
+//        if($result){
+//            $imagen = mysqli_fetch_assoc($result);
+//            return json_encode($imagen);
+//        }else{
+//            return json_encode("false");
+//        }
     }
 
 
@@ -235,7 +341,8 @@ function cargarGaleriaUsuario()
         $iduser = $_POST['datos']['iduser'];
         $title = $_POST['datos']['title'];
         $description = $_POST['datos']['description'];
-        $date = date("m.d.y"); ;
+        setlocale(LC_TIME,"es_ES.UTF-8");
+        $date = ucwords(strftime("%d.%m.%Y"));
         $likes = 0;
         $views = 0;
         $category = $_POST['datos']['category'];
@@ -470,14 +577,15 @@ function cargarComentarios()
     }
 }
 function daleALike(){
-    $iduser = $_POST['iduser'];
+    $iduserlike = $_POST['iduserlike'];
+    $iduserliked = $_POST['iduserliked'];
     $idimage = $_POST['idimage'];
     $conn = mysqli_connect("localhost", "root", "", "cgpulse");
     if (mysqli_connect_errno($conn)) {
         return json_encode(0);
     } else {
         $result ="";
-        $query = "SELECT idlike from likes where idimage='$idimage' and iduser='$iduser'";
+        $query = "SELECT idlike from likes where idimage='$idimage' and iduser='$iduserlike'";
         $result = mysqli_query($conn, $query);
         $resultados = mysqli_fetch_row($result);
         if ($resultados[0]!=null) {
@@ -488,7 +596,7 @@ function daleALike(){
 //
             $result = mysqli_query($conn, $query);
             if($result){
-                $query  = "UPDATE users SET likes=likes-1 where iduser='$iduser'";
+                $query  = "UPDATE users SET likes=likes-1 where iduser='$iduserliked'";
                 mysqli_query($conn,$query);
 
 
@@ -506,11 +614,11 @@ function daleALike(){
         }else{
 
 //            return json_encode("No se encuentra ");
-            $query = "INSERT INTO likes(idimage,iduser) VALUES ('$idimage','$iduser') ";
+            $query = "INSERT INTO likes(idimage,iduser) VALUES ('$idimage','$iduserlike') ";
             $result = mysqli_query($conn, $query);
             if ($result){
 
-                $query  = "UPDATE users SET likes=likes+1 where iduser='$iduser'";
+                $query  = "UPDATE users SET likes=likes+1 where iduser='$iduserliked'";
                 mysqli_query($conn,$query);
 
                 $query  = "UPDATE images SET likes=likes+1 where idimage='$idimage'";
@@ -573,12 +681,15 @@ if(isset($_POST['metodo'])) {
                 break;
             case "cargarGaleriaMasPopulares" : echo cargarGaleriaMasPoulares();
                 break;
+            case "cargarGaleriaMasVisitados" : echo cargarGaleriaMasVisitados();
+                break;
             case "cargarComentarios" : echo cargarComentarios();
                 break;
             case "daleALike" : echo daleALike();
                 break;
-
             case "aniadirComentario" : echo aniadirComentario();
+                break;
+            case "borrarProyecto" : echo borrarProyecto();
                 break;
         }
     }

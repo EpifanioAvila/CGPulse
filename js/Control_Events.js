@@ -13,10 +13,8 @@ function onclick_cargarFormularioInicioSesion() {
 function onload_main() {
     let categoriasYBuscador = document.getElementById("CategoriasYBuscadorBotonera");
     let botonesAccesoUsuario = document.getElementById("botonesAccesoUsuario");
+
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
-    // cargarLayout(PORTFOLIOBASE,cuerpoBase,uiPortfolioBase);
-    // cargarLayout(cuerpoBase,FORMULARIOREGISTRO,uiFormularioRegistro);
-    // cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
 
     console.log("cargando botones")
@@ -44,8 +42,8 @@ function onclick_registrarUSuario() {
 
     // $('body').css('cursor', 'progress');
     let dato1  = $("#username").val();
-    let dato2  = $("#pass1").val();
-    let dato2b  = $("#pass2").val();
+    let dato2  = Sha256.hash($("#pass1").val());
+    let dato2b  = Sha256.hash($("#pass2").val());
     let dato4  = $("#name").val();
     let dato5  = $("#surname").val();
     let dato3  = $("#email").val();
@@ -104,7 +102,7 @@ function onclick_registrarUSuario() {
 }
 function onclick_iniciarSesion() {
     let username = $('#username').val();
-    let pass = $('#pass1').val();
+    let pass = Sha256.hash($('#pass1').val());
     let data = {metodo:"iniciarSesion",user:username,pass:pass};
     $.post(
         CONEXIONES,
@@ -218,24 +216,37 @@ function onclick_subirProyecto() {
 
     }
 }
-function onclick_cargarProyecto(event) {
-    let idTarget = event.target.id;
+function onclick_cargarProyecto(ids) {
+    let idTarget = ids;
     let idimage = idTarget.split(",")[0];
     let iduser = idTarget.split(",")[1];
-    console.log(iduser)
-    console.log(idimage)
+    // console.log(iduser)
+    // console.log(idimage)
     $.post(
         CONEXIONES,
         {metodo:"cargarProyecto",idimage:idimage,iduser:iduser},
         function (data) {
             if(JSON.parse(data)!="false"){
-                console.log(JSON.parse(data));
+                // console.log(JSON.parse(data));
                 sessionStorage.setItem("infoproyecto",data);
                 let cuerpoBase = document.getElementById("cuerpoBase");
                 cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
+            }else{
+                console.log("no encontrado")
             }
 
         }
     )
 
+}
+function onclick_borrarProyecto(idimage,iduser) {
+    alert("borrando obra "+idimage);
+    $.post(
+        CONEXIONES,
+        {metodo:"borrarProyecto",idimage:idimage,iduser:iduser},
+        function(data){
+            onclick_cargarPortfolio(iduser)
+        });
+
+    event.stopPropagation();
 }
