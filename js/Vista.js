@@ -18,9 +18,13 @@ function uiBotonesAccesoUsuarioIniciado() {
     $(document).ready(function(){
         $('.dropdown-toggle').dropdown()
     });
+    $()
     $('#btn-cerrarSesion').on("click",function () {
         sessionStorage.removeItem("userIniciado");
         onload_main();
+    });
+    $('#btn-notificaciones').on("click",function () {
+        onclick_cargarMenuNotificaciones();
     });
     $('#uploadproyect').on("click",onclick_cargarNuevoProyecto);
     $('#idbtn-username').html(user.username) ;
@@ -447,5 +451,8 @@ function uiProyectoBase(){
 
         }
     )
+
+}
+function uiMenuNotificaciones() {
 
 }

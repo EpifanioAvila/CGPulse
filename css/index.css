@@ -75,7 +75,7 @@ a{
     border:1px solid black;
 }
 .borde2{
-    border:1px solid crimson;
+    border:1px solid #23CF5F;
 }
 
 .logo{
@@ -168,7 +168,22 @@ span.glyphicon.glyphicon-search{
 span.glyphicon.glyphicon-search:hover{
     color: #23CF5F;
 }
+.capascroll{
+    overflow-y:scroll;
+}
+.capascroll::-webkit-scrollbar {
+    width: 1em;
+}
 
+.capascroll::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.capascroll::-webkit-scrollbar-thumb {
+    background-color: #23CF5F;
+    outline: 1px solid slategrey;
+    border-radius: 10px;
+}
 .btn-default:hover{
     background-color: #1c1c1d;
     border-color: #23CF5F;
@@ -380,6 +395,17 @@ a:hover{
     background-size: cover;
 }
 
+.capacircularnoti{
+    height: 30px;
+    width:30px;
+    margin:5px;
+    border-radius: 100%;
+    border:1px solid #23cf5f;
+    /*background-image: url("../imgs/hayley.jpg");*/
+    background-position: center;
+    background-size: cover;
+}
+
 .btn-group *{
     /*font-family: "serif"!Important;*/
     color: white;
@@ -484,4 +510,29 @@ button#idLikes{
 }
 #idImagenProyecto{
     width:100%;
+}
+.etiquetanotificacion{
+    margin-top: 10px;
+}
+.etiquetanotitexto{
+    height: 100%;
+    display: flex;
+    width:100%;
+    align-items: center;
+    padding-left: 5px;
+}
+.etiquetanoti{
+    display: flex;
+    background-color: #23cf5f;
+    width:10px;
+    height: 100%;
+}
+
+.etiquetanotiimagen{
+    display: flex;
+    background-color: #23cf5f;
+    width:50px;
+    border:1px solid #23cf5f;
+    border-color: #23cf5f #23cf5f #23cf5f transparent;
+    height: 100%;
 }

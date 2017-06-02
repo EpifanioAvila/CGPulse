@@ -10,6 +10,10 @@ function onclick_cargarFormularioInicioSesion() {
     let cuerpoBase = document.getElementById("cuerpoBase");
     cargarLayout(cuerpoBase,FORMULARIOLOGIN,uiFormularioLogin);
 }
+function onclick_cargarMenuNotificaciones(){
+    let cuerpoBase = document.getElementById("cuerpoBase");
+    cargarLayout(cuerpoBase,MENUNOTIFICACIONES,uiMenuNotificaciones);
+}
 function onload_main() {
     let categoriasYBuscador = document.getElementById("CategoriasYBuscadorBotonera");
     let botonesAccesoUsuario = document.getElementById("botonesAccesoUsuario");
@@ -136,8 +140,10 @@ function onclick_modificarUsuario() {
         let dato6   = $("#email").val();
         let dato7   = $("#city").val();
         let dato8   = $("#country").val();
+        let dato11   =  $("#category").val();
         let dato9   = banner.replace("\/","/");
         let dato10   = userimg.replace("\/","/");
+
 
         let campos = {iduser:user.iduser, username : dato1,pass : dato2,email: dato6, name:dato4, surname:dato5,city:dato7,country:dato8,banner:dato9,userimg:dato10};
         let data = {metodo:"modificarUsuario",datos:campos};
@@ -234,10 +240,8 @@ function onclick_cargarProyecto(ids) {
             }else{
                 console.log("no encontrado")
             }
-
         }
     )
-
 }
 function onclick_borrarProyecto(idimage,iduser) {
     alert("borrando obra "+idimage);
