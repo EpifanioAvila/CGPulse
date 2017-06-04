@@ -447,13 +447,13 @@ textarea{
     background-color: #1c1c1d!important;
     border: 1px solid #23cf5f!important;
 }
-.degradado:hover{
+.degradado{
     /*background: rgba(255,255,255,1);*/
     /*visibility: visible;*/
 
     background-size: cover!important;
     background-position: center!important;
-    background: linear-gradient(to bottom, transparent,transparent,black)!important;
+    /*background: linear-gradient(to bottom, transparent,transparent,black)!important;*/
 }
 .footer{
     background-color: #2f2f30;
@@ -535,4 +535,11 @@ button#idLikes{
     border:1px solid #23cf5f;
     border-color: #23cf5f #23cf5f #23cf5f transparent;
     height: 100%;
+}
+select.form-control.input-group-btn2.letras{
+    background-color: #1c1c1d;
+    border:1px solid #23cf5f;
+}
+.paddingBotomt20{
+    padding-bottom: 20px;
 }

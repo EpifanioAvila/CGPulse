@@ -40,7 +40,64 @@ function onclick_cargaIndex() {
 
     // $('body').css('cursor', 'progress');
 }
+function onclick_cargarGaleriaPopulares() {
+    $('.col-lg-2.col-md-3.col-sm-4.col-xs-6.alto50.altofull.alinear-horizontal.alinear-vertical:nth-child(1)').css("background-color","#2f2f30");
+    $('.col-lg-2.col-md-3.col-sm-4.col-xs-6.alto50.altofull.alinear-horizontal.alinear-vertical:nth-child(2)').css("background-color","");
 
+    let cuerpoBase = document.getElementById("galeriaprincipal");
+    cuerpoBase.innerHTML = "<h1>Cargando Galeria...</h1>";
+    $.post(
+        CONEXIONES,
+        {metodo:'cargarGaleriaMasPopulares'},
+        function(data) {
+
+            if (data.length) {
+
+                cuerpoBase.innerHTML = "";
+                let galeria = JSON.parse(data);
+                for(let i = 0; i < galeria.length; i++){
+                    let imagen = galeria[i].image.replace("\/","/");
+                    cuerpoBase.innerHTML+=
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                        "</div>";
+                }
+
+            } else {
+                console.log("No se han encontrado usuarios");
+            }
+        }
+    )
+
+}
+function onclick_cargarGaleriaVisitados() {
+    $('.col-lg-2.col-md-3.col-sm-4.col-xs-6.alto50.altofull.alinear-horizontal.alinear-vertical:nth-child(2)').css("background-color","#2f2f30");
+    $('.col-lg-2.col-md-3.col-sm-4.col-xs-6.alto50.altofull.alinear-horizontal.alinear-vertical:nth-child(1)').css("background-color","");
+
+    let cuerpoBase = document.getElementById("galeriaprincipal");
+    cuerpoBase.innerHTML = "<h1>Cargando Galeria...</h1>";
+    $.post(
+        CONEXIONES,
+        {metodo:'cargarGaleriaMasVisitados'},
+        function(data) {
+
+            if (data.length) {
+
+                cuerpoBase.innerHTML = "";
+                let galeria = JSON.parse(data);
+                for(let i = 0; i < galeria.length; i++){
+                    let imagen = galeria[i].image.replace("\/","/");
+                    cuerpoBase.innerHTML+=
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                        "</div>";
+                }
+
+            } else {
+                console.log("No se han encontrado usuarios");
+            }
+        }
+    )
+
+}
 
 function onclick_registrarUSuario() {
 
@@ -133,8 +190,8 @@ function onclick_modificarUsuario() {
     if(JSON.parse(sessionStorage.getItem("userIniciado"))){
         let user = JSON.parse(sessionStorage.getItem("userIniciado"));
         let dato1   = $("#username").val();
-        let dato2   = $("#pass1").val();
-        let dato3   = $("#pass2").val();
+        let dato2   = Sha256.hash($("#pass1").val());
+        let dato3   = Sha256.hash($("#pass2").val());
         let dato4   = $("#name").val();
         let dato5   = $("#surname").val();
         let dato6   = $("#email").val();
@@ -144,27 +201,31 @@ function onclick_modificarUsuario() {
         let dato9   = banner.replace("\/","/");
         let dato10   = userimg.replace("\/","/");
 
+        if(dato2 == dato3){
+            let campos = {iduser:user.iduser, username : dato1,pass : dato2,email: dato6, name:dato4, surname:dato5,city:dato7,country:dato8,banner:dato9,userimg:dato10,category:dato11};
+            let data = {metodo:"modificarUsuario",datos:campos};
+            $.post(
+                CONEXIONES,
+                data,
+                function (data) {
 
-        let campos = {iduser:user.iduser, username : dato1,pass : dato2,email: dato6, name:dato4, surname:dato5,city:dato7,country:dato8,banner:dato9,userimg:dato10};
-        let data = {metodo:"modificarUsuario",datos:campos};
-        $.post(
-            CONEXIONES,
-            data,
-            function (data) {
+                    // console.log(JSON.parse(data).replace("\/","/"))
+                    if(JSON.parse(data)=="false"){
+                        alert("No se ha podido modificar los datos en estos momentos")
+                    }else{
+                        sessionStorage.setItem("userIniciado",data);
+                        alert("Usuario modificado con exito");
+                        let cuerpoBase = document.getElementById("cuerpoBase");
+                        cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario);
+                        cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
 
-                // console.log(JSON.parse(data).replace("\/","/"))
-                if(JSON.parse(data)=="false"){
-                    alert("No se ha podido modificar los datos en estos momentos")
-                }else{
-                    sessionStorage.setItem("userIniciado",data);
-                    alert("Usuario modificado con exito");
-                    let cuerpoBase = document.getElementById("cuerpoBase");
-                    cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario);
-                    cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
-
+                    }
                 }
-            }
-        )
+            )
+        }else{
+            alert("Las contraseñas deben coincidir")
+        }
+
     }
 
 }
@@ -250,7 +311,8 @@ function onclick_borrarProyecto(idimage,iduser) {
         {metodo:"borrarProyecto",idimage:idimage,iduser:iduser},
         function(data){
             onclick_cargarPortfolio(iduser)
-        });
+        }
+    );
 
     event.stopPropagation();
 }

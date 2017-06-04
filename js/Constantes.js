@@ -10,6 +10,8 @@ const PORTFOLIOBASE = "htmls/portfolioBase.html";
 const FORMULARIONUEVOPROYECTO = "htmls/formularioNuevoProyecto.html";
 const PROYECTOBASE = "htmls/proyectoBase.html";
 const MENUNOTIFICACIONES = "htmls/menuNotificaciones.html";
+const FILTROCATEGORIAS = "htmls/filtroCategorias.html";
+
 
 
 const CUERPOBASE = "htmls/cuerpoBase.html";

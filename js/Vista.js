@@ -40,6 +40,40 @@ function uiBotonesAccesoUsuarioIniciado() {
 }
 function uiBotonesCategoriasBuscador() {
 
+    $('#btn-BuscadorSup').click(function () {
+
+        cargarLayout(cuerpoBase,FILTROCATEGORIAS,uiFiltroCategorias);
+        filtro = $('#buscadorProyectosSup').val().trim();
+        console.clear();
+
+            $.post(
+                CONEXIONES,
+                {metodo:"buscarProyecto",filtro:filtro},
+                function(data) {
+
+                    if (data.length) {
+                        let cuerpoBase = document.getElementById("galeriaprincipal");
+
+                        cuerpoBase.innerHTML = "";
+                        let galeria = JSON.parse(data);
+                        for(let i = 0; i < galeria.length; i++){
+                            let imagen = galeria[i].image.replace("\/","/");
+                            cuerpoBase.innerHTML+=
+                                "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                                "</div>";
+                        }
+
+                    }else{
+                        console.log("no results");
+                    }
+                }
+            )
+
+    });
+    $('#btn-categorias').on("click",function () {
+        console.log("holaa");
+        cargarLayout(cuerpoBase,FILTROCATEGORIAS,uiFiltroCategorias);
+    });
     $("#logo").on("click",onclick_cargaIndex);
 }
 let url = "";
@@ -70,41 +104,23 @@ function uiGaleriaPrincipal() {
     )
 }
 function uiCuerpoBase() {
-    $('a[href$="#galeriaprincipal"]').on("click",function(){
-        uiGaleriaPrincipal();
-    });
-    $('a[href$="#galeriaprincipal"]').on("click",function(){
-        uiGaleriaPrincipal();
-    });
-    let data = {metodo:'cargarGaleriaMasPopulares'};
 
-    $.post(
-        CONEXIONES,
-        data,
-        function(data) {
+    let cuerpoBase = document.getElementById("galeriaprincipal");
+    cuerpoBase.innerHTML = "<h1>Cargando Galeria...</h1>";
 
-            if (data.length) {
-                let cuerpoBase = document.getElementById("galeriaprincipal");
+    $('.col-lg-2.col-md-3.col-sm-4.col-xs-6.alto50.altofull.alinear-horizontal.alinear-vertical:nth-child(1)').on("click",function () {
 
-                cuerpoBase.innerHTML = "";
-                let galeria = JSON.parse(data);
-                for(let i = 0; i < galeria.length; i++){
-                    let imagen = galeria[i].image.replace("\/","/");
-                    cuerpoBase.innerHTML+=
-                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
-                        "</div>";
-                }
+        onclick_cargarGaleriaPopulares();
+    })
+    $('.col-lg-2.col-md-3.col-sm-4.col-xs-6.alto50.altofull.alinear-horizontal.alinear-vertical:nth-child(2)').on("click",function () {
 
-            } else {
-                console.log("No se han encontrado usuarios");
-            }
-        }
-    )
-    .done(function () {
+        onclick_cargarGaleriaVisitados();
+    })
 
-        // $('body').css('cursor', 'initial');
-    });
+    onclick_cargarGaleriaPopulares();
+
 }
+
 function imprimirUser(user){
     let mostrar = false;
     // try{
@@ -196,7 +212,58 @@ function uiCodificar(im,key){
 
 }
 
+function uiFiltroCategorias() {
+    $.post(
+        CONEXIONES,
+        {metodo:"cargarCategorias"},
+        function (data) {
+            if(JSON.parse(data).length){
+                let categorias = JSON.parse(data);
+                let listacategorias  = document.getElementById('listaCategoriasFiltro');
+                listacategorias.innerHTML ="";
+                for(let i = 0 ; i < categorias.length ; i++){
+                    listacategorias.innerHTML += "<option value=''>"+categorias[i]['namecategoria']+"</option>";
+                }
+            }
 
+        }
+    )
+    $('#btn-buscador').on("click",function () {
+            // console.log($('selectorder').select());
+            let filter = "";
+            let category ="";
+            let order ="";
+            order = $('#selectorder option:selected').text();
+            console.log(order)
+        console.log(category)
+            category = $('#listaCategoriasFiltro option:selected').text();
+
+            filter = $('#idBuscar').val().trim();
+            $.post(
+                CONEXIONES,
+                {metodo:"filtrarCategorias",filter:filter,order:order,category:category},
+                function(data) {
+                    // console.log(JSON.parse(data))
+                    if (data.length) {
+                        let cuerpoBase = document.getElementById("galeriaprincipal");
+                        console.log(JSON.parse(data))
+                        cuerpoBase.innerHTML = "";
+                        let galeria = JSON.parse(data);
+                        for(let i = 0; i < galeria.length; i++){
+                            let imagen = galeria[i].image.replace("\/","/");
+                            cuerpoBase.innerHTML+=
+                                "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                                "</div>";
+                        }
+
+                    }else{
+                        console.log("no results");
+                    }
+                }
+            )
+
+    })
+}
 function uiPrevisualizar(event){
 
     $("#capaFlotanteBarraProgreso").css("display","block");
@@ -249,7 +316,10 @@ function uiConfiguracionUsuario() {
     let dato4   = $("#name").val(user.name);
     let dato5   = $("#surname").val(user.surname);
     let dato6   = $("#email").val(user.email);
-    let dato7   = $("#city").val(user.city);
+    let dato7   = $("#city").val(user.city)
+    let dato11   = $("#category").val(user.category)
+        console.log(user.category)
+
     let dato8   = $("#country").val(user.country);
     let dato9   = $("#imgprueba").attr("src",user.bannerimg.replace("\/","/"));
     let dato10   = $("#imgprueba2").attr("src",user.userimg.replace("\/","/"));
@@ -318,7 +388,6 @@ function uiPortfolioBase() {
                 }
             }
         )
-
 }
 let query = "SELECT * FROM images i LEFT OUTER JOIN users u ON i.iduser = u.iduser;";
 
@@ -454,5 +523,39 @@ function uiProyectoBase(){
 
 }
 function uiMenuNotificaciones() {
+    let user = JSON.parse(sessionStorage.getItem("userIniciado"));
+    document.getElementById("idcapalikes").innerHTML ="<h1 class='letras'>Cargando Notificaciones...</h1>";
+    document.getElementById("idcapaComments").innerHTML ="<h1 class='letras'>Cargando Notificaciones...</h1>";
+
+    $.post(
+        CONEXIONES,
+        {metodo:"cargarLikes",iduser:user.iduser},
+        function (data) {
+            if(JSON.parse(data).length && JSON.parse(data)!=0 && JSON.parse(data)!="false"){
+                let resultados = JSON.parse(data);
+                document.getElementById("idcapalikes").innerHTML = "";
+                for (let i = 0 ; i < resultados.length;i++){
+                    document.getElementById("idcapalikes").innerHTML += "<div class='row etiquetanotificacion'><div class='col-xs-12   alto50 alinear-vertical'><div class='etiquetanoti alinear-vertical'></div><div class='etiquetanotitexto borde2 alinear-vertical borde2 nopaddingnomargin letras'><span class='capacircularnoti back1' onclick='onclick_cargarPortfolio(`"+resultados[i]['iduserlike']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['userimg']+")'></span>El usuario  <a class='letraverde' onclick='onclick_cargarPortfolio(`"+resultados[i]['iduserlike']+"`)'>&nbsp; "+resultados[i]['username']+" &nbsp; </a> te ha dado like a tu proyecto '<a class='letraverde' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)'>&nbsp; "+resultados[i]['title']+" &nbsp; </a>' </div> <div class='etiquetanotiimagen ' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['image']+")'></div></div></div>";
+                }
+            }else{
+                alert("Todavía no tienes notificaciones");
+            }
+        }
+    )
+    $.post(
+        CONEXIONES,
+        {metodo:"cargarComments",iduser:user.iduser},
+        function (data) {
+            if(JSON.parse(data).length && JSON.parse(data)!=0 && JSON.parse(data)!="false"){
+                let resultados = JSON.parse(data);
+                document.getElementById("idcapaComments").innerHTML = "";
+                for (let i = 0 ; i < resultados.length;i++){
+                    document.getElementById("idcapaComments").innerHTML += "<div class='row etiquetanotificacion'><div class='col-xs-12   alto50 alinear-vertical'><div class='etiquetanoti alinear-vertical'></div><div class='etiquetanotitexto borde2 alinear-vertical borde2 nopaddingnomargin letras'><span class='capacircularnoti back1' onclick='onclick_cargarPortfolio(`"+resultados[i]['idusercomment']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['userimg']+")'></span>El usuario  <a class='letraverde' onclick='onclick_cargarPortfolio(`"+resultados[i]['idusercomment']+"`)'>&nbsp; "+resultados[i]['username']+" &nbsp; </a> ha comentado en tu proyecto '<a class='letraverde' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)'>&nbsp; "+resultados[i]['title']+" &nbsp; </a>' </div> <div class='etiquetanotiimagen ' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['image']+")'></div></div></div>";
+                }
+            }else{
+                alert("Todavía no tienes notificaciones");
+            }
+        }
+    )
 
 }
