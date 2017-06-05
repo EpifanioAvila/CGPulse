@@ -15,20 +15,21 @@ function onclick_cargarMenuNotificaciones(){
     cargarLayout(cuerpoBase,MENUNOTIFICACIONES,uiMenuNotificaciones);
 }
 function onload_main() {
+
+    let cuerpoBase = document.getElementById("cuerpoBase");
+    cuerpoBase.style.minHeight = screen.height+"px";
+    console.log(window.innerHeight)
     let categoriasYBuscador = document.getElementById("CategoriasYBuscadorBotonera");
     let botonesAccesoUsuario = document.getElementById("botonesAccesoUsuario");
 
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
     cargarLayout(categoriasYBuscador,BOTONERAIZQMENUNAV,uiBotonesCategoriasBuscador);
 
-    console.log("cargando botones")
     if(sessionStorage.getItem("userIniciado")){
-        console.log("Iniciado");
 
         cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
 
     }else{
-        console.log("No iniciado")
         cargarLayout(botonesAccesoUsuario,BOTONERAACCESO,uiBotonesAccesoUsuario);
 
     }
@@ -36,6 +37,8 @@ function onload_main() {
 function onclick_cargaIndex() {
 
     let cuerpoBase = document.getElementById("cuerpoBase");
+    cuerpoBase.style.minHeight = screen.height+"px";
+    console.log(window.innerHeight)
     cargarLayout(cuerpoBase,CUERPOBASE,uiCuerpoBase);
 
     // $('body').css('cursor', 'progress');
@@ -52,7 +55,6 @@ function onclick_cargarGaleriaPopulares() {
         function(data) {
 
             if (data.length) {
-
                 cuerpoBase.innerHTML = "";
                 let galeria = JSON.parse(data);
                 for(let i = 0; i < galeria.length; i++){
@@ -87,7 +89,7 @@ function onclick_cargarGaleriaVisitados() {
                 for(let i = 0; i < galeria.length; i++){
                     let imagen = galeria[i].image.replace("\/","/");
                     cuerpoBase.innerHTML+=
-                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(\'"+galeria[i].idimage+","+galeria[i].iduser+"\')' >" +
                         "</div>";
                 }
 
@@ -121,12 +123,9 @@ function onclick_registrarUSuario() {
 
     let data = {metodo : 'crearUsuario',datos : campos};
 
-    console.log(dato8);
-    // console.log(dato11.valor);
-    // console.log("caracteres:"+banner.length);
     let resultpeti =false;
     if(dato2 != dato2b){
-        alert("La contraseña tiene que coincidir")
+        snackbarAlert("La contraseña tiene que coincidir")
     }else{
         let peticion = $.post(
                             CONEXIONES,
@@ -135,27 +134,24 @@ function onclick_registrarUSuario() {
                                 $('body').css('cursor', 'initial');
                                 try{
                                     let resultado = JSON.parse(data);
-                                    console.log(data);
                                     if(resultado == "0" || resultado == 0){
-                                        alert("El usuario ya existe");
+                                        snackbarAlert("El usuario ya existe");
                                     }else{
                                         if(resultado == "true"){
                                             resultpeti = true
                                         }else{
-                                            alert("Imagen demasiado grande!");
+                                            snackbarAlert("Imagen demasiado grande!");
                                         }
                                     }
                                 }catch (e){
-                                    console.log(dato11);
-                                    console.log(dato8);
-                                    alert("No se ha podido registrar el usuario en estos momentos.");
+                                    snackbarAlert("No se ha podido registrar el usuario en estos momentos.");
                                 }
 
 
                             })
         .done(function () {
             if(resultpeti){
-                alert("Usuario registrado correctamente");
+                snackbarAlert("Usuario registrado correctamente");
             }
         });
     }
@@ -171,12 +167,12 @@ function onclick_iniciarSesion() {
         function (data) {
             let user = JSON.parse(data);
             if(user.username!=null){
-                console.log(user)
+                snackbarAlert("Bienvenido "+JSON.parse(data).username)
                 sessionStorage.setItem("userIniciado",data);
                 onload_main();
 
             }else{
-                alert("Datos incorrectos")
+                snackbarAlert("Datos incorrectos")
             }
     })
 
@@ -209,12 +205,11 @@ function onclick_modificarUsuario() {
                 data,
                 function (data) {
 
-                    // console.log(JSON.parse(data).replace("\/","/"))
                     if(JSON.parse(data)=="false"){
-                        alert("No se ha podido modificar los datos en estos momentos")
+                        snackbarAlert("No se ha podido modificar los datos en estos momentos")
                     }else{
                         sessionStorage.setItem("userIniciado",data);
-                        alert("Usuario modificado con exito");
+                        snackbarAlert("Usuario modificado con exito");
                         let cuerpoBase = document.getElementById("cuerpoBase");
                         cargarLayout(cuerpoBase,CONFIGURADORUSUARIO,uiConfiguracionUsuario);
                         cargarLayout(botonesAccesoUsuario,BOTONERAACCESOINICIADO,uiBotonesAccesoUsuarioIniciado);
@@ -223,7 +218,7 @@ function onclick_modificarUsuario() {
                 }
             )
         }else{
-            alert("Las contraseñas deben coincidir")
+            snackbarAlert("Las contraseñas deben coincidir")
         }
 
     }
@@ -231,7 +226,6 @@ function onclick_modificarUsuario() {
 }
 function onclick_cargarPortfolioPropietario(event) {
     let target = $(event.target).attr(id);
-    console.log("hola"+$(target))
     let iduser = target;
     sessionStorage.setItem("infoUser",iduser);
 
@@ -243,7 +237,7 @@ function onclick_cargarPortfolio(iduser) {
     sessionStorage.setItem("infoUser",iduser);
 
     cargarLayout(cuerpoBase,PORTFOLIOBASE,uiPortfolioBase);
-    console.log("holiwis");
+    // console.log("holiwis");
 
 }
 function onclick_cargarNuevoProyecto() {
@@ -265,7 +259,6 @@ function onclick_subirProyecto() {
         let campos = {iduser:user.iduser, title:title, description:description, date:"", likes:0, category:category, tags:tags, image: image}
         let datos = {metodo: "crearProyecto", datos: campos}
 
-        console.log("hola");
 
         $.post(
             CONEXIONES,
@@ -274,9 +267,9 @@ function onclick_subirProyecto() {
                 console.log(data)
                 // console.log(JSON.parse(data).replace("\/","/"))
                 if(JSON.parse(data)=="true"){
-                    alert("Proyecto publicado correctamente");
+                    snackbarAlert("Proyecto publicado correctamente");
                 }else{
-                    alert("No se ha podido modificar el proyecto en estos momentos")
+                    snackbarAlert("No se ha podido modificar el proyecto en estos momentos")
                 }
             }
         )
@@ -287,32 +280,67 @@ function onclick_cargarProyecto(ids) {
     let idTarget = ids;
     let idimage = idTarget.split(",")[0];
     let iduser = idTarget.split(",")[1];
-    // console.log(iduser)
-    // console.log(idimage)
     $.post(
         CONEXIONES,
         {metodo:"cargarProyecto",idimage:idimage,iduser:iduser},
         function (data) {
+            console.log("hola");
+
             if(JSON.parse(data)!="false"){
                 // console.log(JSON.parse(data));
                 sessionStorage.setItem("infoproyecto",data);
                 let cuerpoBase = document.getElementById("cuerpoBase");
                 cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
             }else{
-                console.log("no encontrado")
+                snackbarAlert("no encontrado")
             }
         }
     )
 }
 function onclick_borrarProyecto(idimage,iduser) {
-    alert("borrando obra "+idimage);
+    snackbarAlert("borrando obra "+idimage);
     $.post(
         CONEXIONES,
         {metodo:"borrarProyecto",idimage:idimage,iduser:iduser},
         function(data){
             onclick_cargarPortfolio(iduser)
+            snackbarAlert("Borrando Proyecto")
         }
     );
 
     event.stopPropagation();
+}
+
+function snackbarAlert(msg) {
+    var x = document.getElementById("snackbar")
+    x.className = "show";
+    x.innerHTML = msg;
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+function onclick_enviarCorreo() {
+    let nombre= $('#usuario-nombre').val();
+    let email= $('#usuario-email').val();
+    let asunto= $('#asunto-contacto').val();
+    let mensaje= $('#mensaje-contacto').val();
+    let para = JSON.parse(sessionStorage.getItem("infoproyecto"))
+    console.log("para");
+    console.log(para.email);
+    if(nombre != "" && email !="" && asunto != "" && mensaje != "" && para.email != ""){
+        $.post(
+            CONEXIONES,
+            {metodo:"enviarCorreo",name:nombre,to:email,subject:asunto,from:para.email,message:mensaje},
+            function (data) {
+                console.log(data)
+                if(JSON.parse(data)=="true"){
+                    snackbarAlert("correo enviado")
+
+                }else{
+                    snackbarAlert("el correo no se ha podido enviar en estos momentos")
+
+                }
+            }
+        )
+    }else{
+        snackbarAlert("todos los campos son obligatorios")
+    }
 }

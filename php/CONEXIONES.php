@@ -6,6 +6,7 @@
  * Time: 21:02
  */
 include "CNTS.php";
+//include "correo.php";
 
 class Prueba
 {
@@ -292,15 +293,16 @@ function getVisitas(){
 function cargarProyecto(){
     $idimage = $_POST['idimage'];
     $iduser = $_POST['iduser'];
-    $conn = mysqli_connect(HOST,USERBBDD,"",NAMEBBDD);
+    $conn = mysqli_connect(HOST,USERBBDD,PASSBBDD,NAMEBBDD);
     if(mysqli_connect_errno($conn)){
         return json_encode("Imposible conectarse con la base de datos");
     }else {
 //
         $query = "UPDATE images i, users u SET i.views = i.views +1 , u.views = u.views +1 where i.idimage = '$idimage' AND u.iduser=i.iduser ";
+
         $result = mysqli_query($conn,$query);
 
-        $query = "select u.name, u.surname,u.category as categoryuser,  u.userimg,  i.* from users u left outer join images i on i.iduser=u.iduser where i.idimage='$idimage'";
+        $query = "select u.name, u.surname,u.category as categoryuser,  u.email ,u.userimg, i.* from users u left outer join images i on i.iduser=u.iduser where i.idimage='$idimage'";
         $result = mysqli_query($conn,$query);
         if($result){
             $imagen = mysqli_fetch_assoc($result);
@@ -783,7 +785,7 @@ function filtrarCategorias(){
         mysqli_close($conn);
         return json_encode(0);
     } else {
-        $query = "select * from images where category='$category' AND tags LIKE '%$filter%' OR title LIKE '%$filter%' order by $order DESC ";
+        $query = "select * from images where category='$category' AND (tags LIKE '%$filter%' OR title LIKE '%$filter%') order by $order DESC ";
 //        return json_encode($query);
         $result = mysqli_query($conn,$query);
 
@@ -817,6 +819,34 @@ function filtrarCategorias(){
         }
 
     }
+}
+function enviarCorreoContacto(){
+    $name= $_POST['name'];
+    $from = $_POST['from'];
+    $to = $_POST['to'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+
+    if(correo::sendEmail($to, $subject, $message, $from, $name)){
+        return json_encode("true");
+    }else{
+        return json_encode("false");
+    }
+
+
+//    $body = "De: $from\n E-Mail: $email\n Mensaje:\n $message";
+//
+//    if ($_POST['submit']) {
+//        if ($name != '' && $email != '' && $subject != '') {
+//                if (mail($to, $subject, $body, $from)) {
+//                    return '<p>Tu mensaje fue enviado correctamente</p>';
+//                } else {
+//                    return '<p>Algo salio mal, prueba de nuevo</p>';
+//                }
+//        } else {
+//            return '<p>Por favor, rellena todos los campos del formulario de forma correcta</p>';
+//        }
+//    }
 }
 if(isset($_POST['metodo'])) {
 
@@ -863,6 +893,8 @@ if(isset($_POST['metodo'])) {
             case "cargarCategorias" : echo cargarCategorias();
                 break;
             case "filtrarCategorias" : echo filtrarCategorias();
+                break;
+            case "enviarCorreo" : echo enviarCorreoContacto();
                 break;
         }
     }

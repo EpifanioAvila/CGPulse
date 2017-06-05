@@ -29,7 +29,7 @@
 
 </head>
 <body >
-<div class="barraflotante" id="capaFlotanteBarraProgreso">
+<div class="barraflotante " id="capaFlotanteBarraProgreso">
 
     <div class="progress col-md-12" >
         <div class="progress-bar progress-bar-striped active "  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%;" id="barraprogreso">
@@ -37,26 +37,47 @@
         </div>
     </div>
 </div>
+<div class="letras alert alert-danger" id="snackbar" >asd</div>
+<div id="myModal" class="modal letras">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Contacto</h2>
+        </div>
+        <div class="modal-body">
+            <label for="" class="label letras">Tu Nombre:</label>
+            <input type="text" class="form-control letras input-group-btn2" id="usuario-nombre">
+
+            <label for="" class="label letras">Tu Email:</label>
+            <input type="text" class="form-control letras input-group-btn2" id="usuario-email">
+
+            <label for="" class="label letras">Asunto:</label>
+            <input type="text" class="form-control letras input-group-btn2" id="asunto-contacto">
+
+            <label for="" class="label letras">Mensaje:</label>
+            <textarea name="" class="form-control" id="mensaje-contacto" cols="30" rows="5"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default " id="btn-enviar-mensaje-contacto">Enviar Mensaje</button>
+        </div>
+    </div>
+
+</div>
 <div class="container-fluid ">
     <div class="row navmenu">
         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12  altofull alto50 logo " id="logo">
         </div>
-
-
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6 altofull  alto50   ">
-            <div class="row altofull" id="CategoriasYBuscadorBotonera">
-
-            </div>
+            <div class="row altofull" id="CategoriasYBuscadorBotonera"></div>
         </div>
-
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 altofull  alto50 " id="botonesAccesoUsuario">
-
         </div>
-
     </div>
     <div class="row cuerpobase  " id="cuerpoBase">
     </div>
-    <div class="row footer">
+    <div class="row footer" id="footer">
         <div class="col-xs-12 alto50 text-center  nopaddingnomargin">
             <h4 class="alinear-vertical altofull alinear-horizontal nopaddingnomargin colortextofooter letras">&copy;Epifanio Ávila Garillete</h4>
         </div>
