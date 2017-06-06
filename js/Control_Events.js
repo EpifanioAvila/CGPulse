@@ -299,15 +299,18 @@ function onclick_cargarProyecto(ids) {
 }
 function onclick_borrarProyecto(idimage,iduser) {
     // snackbarAlert("borrando obra "+idimage);
-    $.post(
-        CONEXIONES,
-        {metodo:"borrarProyecto",idimage:idimage,iduser:iduser},
-        function(data){
-            console.log(data)
-            snackbarAlert("Borrando Proyecto")
-            onclick_cargarPortfolio(iduser)
-        }
-    );
+    if(JSON.parse(sessionStorage.getItem("userIniciado")).iduser == iduser){
+        $.post(
+            CONEXIONES,
+            {metodo:"borrarProyecto",idimage:idimage,iduser:iduser},
+            function(data){
+                console.log(data)
+                snackbarAlert("Borrando Proyecto")
+                onclick_cargarPortfolio(iduser)
+            }
+        );
+    }
+
 
     event.stopPropagation();
 }
