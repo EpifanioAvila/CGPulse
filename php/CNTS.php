@@ -10,13 +10,15 @@
 //define("PASSBBDD","");
 //define("NAMEBBDD","cgpulse");
 
-define("MAIL_SMTP","smtp.gmail.com");
-define("MAIL_PORT","587");
-define("MAIL_USER","cgpulseproyect@gmail.com");
-define("MAIL_PASSWORD","ZOO23F89E7896");
 
 //DATOS PARA LA BBDD DE HOSTINGER
 define("HOST","localhost");
 define("USERBBDD","u946441671_root");
 define("PASSBBDD","qwerty123");
 define("NAMEBBDD","u946441671_cgpul");
+
+//DATOS PARA LA BBDD DE ADISS
+//define("HOST","qxy410.adiss.info");
+//define("USERBBDD","qxy410");
+//define("PASSBBDD","Qwerty123");
+//define("NAMEBBDD","qxy410");

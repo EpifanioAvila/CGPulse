@@ -15,7 +15,7 @@ function onclick_cargarMenuNotificaciones(){
     cargarLayout(cuerpoBase,MENUNOTIFICACIONES,uiMenuNotificaciones);
 }
 function onload_main() {
-
+    console.log(Sha256.hash("querty123"))
     let cuerpoBase = document.getElementById("cuerpoBase");
     cuerpoBase.style.minHeight = screen.height+"px";
     console.log(window.innerHeight)
@@ -65,7 +65,7 @@ function onclick_cargarGaleriaPopulares() {
                 }
 
             } else {
-                console.log("No se han encontrado usuarios");
+                console.log("No se han encontrado imagenes");
             }
         }
     )
@@ -89,7 +89,7 @@ function onclick_cargarGaleriaVisitados() {
                 for(let i = 0; i < galeria.length; i++){
                     let imagen = galeria[i].image.replace("\/","/");
                     cuerpoBase.innerHTML+=
-                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(\'"+galeria[i].idimage+","+galeria[i].iduser+"\')' >" +
+                        "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
                         "</div>";
                 }
 
@@ -253,7 +253,7 @@ function onclick_subirProyecto() {
         let description = $('#description').val();
         // console.log(description)
         let tags = $('#tags').val();
-        let category = $('#category').val();
+        let category = $('#category option:selected').text();
         let image = imageproyect;
 
         let campos = {iduser:user.iduser, title:title, description:description, date:"", likes:0, category:category, tags:tags, image: image}
@@ -298,13 +298,14 @@ function onclick_cargarProyecto(ids) {
     )
 }
 function onclick_borrarProyecto(idimage,iduser) {
-    snackbarAlert("borrando obra "+idimage);
+    // snackbarAlert("borrando obra "+idimage);
     $.post(
         CONEXIONES,
         {metodo:"borrarProyecto",idimage:idimage,iduser:iduser},
         function(data){
-            onclick_cargarPortfolio(iduser)
+            console.log(data)
             snackbarAlert("Borrando Proyecto")
+            onclick_cargarPortfolio(iduser)
         }
     );
 
@@ -323,20 +324,26 @@ function onclick_enviarCorreo() {
     let asunto= $('#asunto-contacto').val();
     let mensaje= $('#mensaje-contacto').val();
     let para = JSON.parse(sessionStorage.getItem("infoproyecto"))
-    console.log("para");
-    console.log(para.email);
+    mensaje = "<h3>"+nombre+" te ha enviado un mensaje desde tu portfolio:</h3><h3>Nombre del contacto: "+nombre+" <br/> Email del contacto: "+email+"</h3><p>"+mensaje+"</p>"
     if(nombre != "" && email !="" && asunto != "" && mensaje != "" && para.email != ""){
         $.post(
             CONEXIONES,
-            {metodo:"enviarCorreo",name:nombre,to:email,subject:asunto,from:para.email,message:mensaje},
+            {metodo:"enviarCorreo",name:nombre,to:para.email,subject:asunto,from:email,message:mensaje},
             function (data) {
                 console.log(data)
-                if(JSON.parse(data)=="true"){
-                    snackbarAlert("correo enviado")
+                if(JSON.parse(data)==true){
+
+                    snackbarAlert("Mensaje enviado")
+                    $.post(
+                        CONEXIONES,
+                        {metodo:"enviarCorreo",name:nombre,to:email,subject:"CGPULSE - Mensaje enviado",from:"cgpulseproyect@gmail.com",message:"Tu correo a "+para.name+" ha sido enviado, en cuanto lo lea, contactará contigo"},
+                        function (data) {
+                            // snackbarAlert("Hola")
+                        }
+                    );
 
                 }else{
-                    snackbarAlert("el correo no se ha podido enviar en estos momentos")
-
+                    snackbarAlert("El correo no se ha podido enviar en estos momentos, disculpe las molestias")
                 }
             }
         )

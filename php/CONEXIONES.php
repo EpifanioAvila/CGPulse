@@ -6,7 +6,7 @@
  * Time: 21:02
  */
 include "CNTS.php";
-//include "correo.php";
+include "correo.php";
 
 class Prueba
 {
@@ -92,7 +92,7 @@ class ImageGallery
 }
 
 
-function cargarGaleriaMasPoulares(){
+function cargarGaleriaMasPoPulares(){
 
         $conn = mysqli_connect(HOST, USERBBDD, PASSBBDD, NAMEBBDD);
         if (mysqli_connect_errno($conn)) {
@@ -104,7 +104,7 @@ function cargarGaleriaMasPoulares(){
             $result = mysqli_query($conn, $query);
 
             if ($result) {
-                $imagenes = [];
+                $imagenes = Array();
 
                 while ($linea = mysqli_fetch_assoc($result)) {
 
@@ -318,7 +318,7 @@ function cargarProyecto(){
 function borrarProyecto(){
     $idimage = $_POST['idimage'];
     $iduser = $_POST['iduser'];
-    $conn = mysqli_connect(HOST,USERBBDD,"",NAMEBBDD);
+    $conn = mysqli_connect(HOST,USERBBDD,PASSBBDD,NAMEBBDD);
     if(mysqli_connect_errno($conn)){
         return json_encode("Imposible conectarse con la base de datos");
     }else {
@@ -821,41 +821,42 @@ function filtrarCategorias(){
     }
 }
 function enviarCorreoContacto(){
+
     $name= $_POST['name'];
     $from = $_POST['from'];
     $to = $_POST['to'];
     $subject = $_POST['subject'];
     $message = $_POST['message'];
 
-    if(correo::sendEmail($to, $subject, $message, $from, $name)){
-        return json_encode("true");
+    $para  = $to;
+
+// título
+    $título = $subject;
+
+// mensaje
+    $mensaje =$message;
+
+// Para enviar un correo HTML, debe establecerse la cabecera Content-type
+    $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+    $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+// Cabeceras adicionales
+    $cabeceras .= 'To: CGPULSE - <'.$to.'> '. "\r\n";
+    $cabeceras .= 'From: CGPULSE Contacto - <'.$from.'>' . "\r\n";
+
+// Enviarlo
+    if(mail($para, $título, $mensaje, $cabeceras)){
+        return "true";
     }else{
-        return json_encode("false");
+        return "false";
     }
 
-
-//    $body = "De: $from\n E-Mail: $email\n Mensaje:\n $message";
-//
-//    if ($_POST['submit']) {
-//        if ($name != '' && $email != '' && $subject != '') {
-//                if (mail($to, $subject, $body, $from)) {
-//                    return '<p>Tu mensaje fue enviado correctamente</p>';
-//                } else {
-//                    return '<p>Algo salio mal, prueba de nuevo</p>';
-//                }
-//        } else {
-//            return '<p>Por favor, rellena todos los campos del formulario de forma correcta</p>';
-//        }
-//    }
 }
 if(isset($_POST['metodo'])) {
 
         $metodo = $_POST['metodo'];
 
         switch ($metodo) {
-            case "guardarDibujo" :
-                echo guardarDibujo();
-                break;
             case "crearUsuario" : echo crearUsuario();
                 break;
             case "cargarUsuario" : echo cargarUsuario();
@@ -872,7 +873,7 @@ if(isset($_POST['metodo'])) {
                 break;
             case "getVisitas" : echo getVisitas();
                 break;
-            case "cargarGaleriaMasPopulares" : echo cargarGaleriaMasPoulares();
+            case "cargarGaleriaMasPopulares" : echo cargarGaleriaMasPoPulares();
                 break;
             case "cargarGaleriaMasVisitados" : echo cargarGaleriaMasVisitados();
                 break;

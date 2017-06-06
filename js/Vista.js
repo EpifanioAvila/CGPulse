@@ -1,7 +1,9 @@
 /**
  * Created by Epi on 14/05/2017.
  */
-
+/**
+ * Defino los eventos de el apartado gráfico de los botones superiores de Inicio de sesión y de registro
+ */
 function uiBotonesAccesoUsuario() {
 
     $(document).ready(function(){
@@ -12,6 +14,9 @@ function uiBotonesAccesoUsuario() {
     $("#btn-iniciarsesion").on("click",onclick_cargarFormularioInicioSesion);
 
 }
+/**
+ * Cuando el usuario se ha iniciado, se cargan estos botnoes, que le dan acceso a su portfolio, a editar su usuario y al menú de notificaciones
+ */
 function uiBotonesAccesoUsuarioIniciado() {
     // console.log("cambiando información");
     let user = JSON.parse(sessionStorage.getItem("userIniciado"));
@@ -39,8 +44,14 @@ function uiBotonesAccesoUsuarioIniciado() {
     // $("#btn-iniciarsesion").on("click",onclick_cargarFormularioInicioSesion);
 
 }
+/**
+ * Defino los eventos parael logo, el botón de categorías y el buscador superior
+ */
 function uiBotonesCategoriasBuscador() {
-
+    /**
+     * Cuando el usuario escribe algo en el buscador y presiona el botón con la lupa, hace una petición AJAX al archivo
+     * CONEXIONES y le pasa el filtro por el que buscar
+     */
     $('#btn-BuscadorSup').click(function () {
 
         cargarLayout(cuerpoBase,FILTROCATEGORIAS,uiFiltroCategorias);
@@ -51,14 +62,21 @@ function uiBotonesCategoriasBuscador() {
                 CONEXIONES,
                 {metodo:"buscarProyecto",filtro:filtro},
                 function(data) {
-
+                    /**
+                     * si encuentra algo que coincida con el patrón de búsqueda, le cambiará a la página de categorías y le mostrará los resultados
+                     */
                     if (data.length) {
                         let cuerpoBase = document.getElementById("galeriaprincipal");
 
                         cuerpoBase.innerHTML = "";
                         let galeria = JSON.parse(data);
                         for(let i = 0; i < galeria.length; i++){
+                            /**
+                             * Antes de mostrar la imagen, es necesario eliminar los carácteres innecesiarios, en este caso sustituyemos las \/ por /
+                             *
+                             */
                             let imagen = galeria[i].image.replace("\/","/");
+
                             cuerpoBase.innerHTML+=
                                 "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
                                 "</div>";
@@ -71,13 +89,22 @@ function uiBotonesCategoriasBuscador() {
             )
 
     });
+    /**
+     * Al hacer click sobre el botón categorías te lleva al menú de filtrado por categorías
+     */
     $('#btn-categorias').on("click",function () {
-        console.log("holaa");
+
         cargarLayout(cuerpoBase,FILTROCATEGORIAS,uiFiltroCategorias);
     });
+    /**
+     * Al pulsar sobre el logo de CGPULSE te llevará a la página principal
+     */
     $("#logo").on("click",onclick_cargaIndex);
 }
 let url = "";
+/**
+ * Se encarga de mostrar la galería principal haciendo una petición ajax al archivo de conexiones en el que obtiene todas las imagenes ordenado por likes recibidos
+ */
 function uiGaleriaPrincipal() {
     let data = {metodo:'cargarGaleriaMasPopulares'};
 
@@ -91,7 +118,11 @@ function uiGaleriaPrincipal() {
 
                 cuerpoBase.innerHTML = "";
                 let galeria = JSON.parse(data);
+                /**
+                 * Si encuentra imagenes, entrará een el for y mostrará las imagenes
+                 */
                 for(let i = 0; i < galeria.length; i++){
+
                     let imagen = galeria[i].image.replace("\/","/");
                     cuerpoBase.innerHTML+=
                         "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-images back1 nopaddingnomargin degradado' style='background-image:url("+imagen+")!important' id='"+galeria[i].idimage+","+galeria[i].iduser+"' onclick='onclick_cargarProyecto(`"+galeria[i].idimage+","+galeria[i].iduser+"`)' >" +
@@ -122,22 +153,22 @@ function uiCuerpoBase() {
 
 }
 
-function imprimirUser(user){
-    let mostrar = false;
-    // try{
-    //     if(user.banner != null){
-            let bannerimg= user.bannerimg.replace("\/","/");
-            // console.log(bannerimg)
-            // document.getElementById("galeriaprincipal").innerHTML += "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1 capaimggaleria' > </div>";
-
-            document.getElementById("galeriaprincipal").innerHTML += "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' style='background-image: url("+bannerimg+");'></div>";
-        // }
-    // }catch (event){
-    //     document.getElementById("galeriaprincipal").innerHTML += "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' ></div>";
-
-    // }
-
-}
+// function imprimirUser(user){
+//     let mostrar = false;
+//     // try{
+//     //     if(user.banner != null){
+//             let bannerimg= user.bannerimg.replace("\/","/");
+//             // console.log(bannerimg)
+//             // document.getElementById("galeriaprincipal").innerHTML += "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1 capaimggaleria' > </div>";
+//
+//             document.getElementById("galeriaprincipal").innerHTML += "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' style='background-image: url("+bannerimg+");'></div>";
+//         // }
+//     // }catch (event){
+//     //     document.getElementById("galeriaprincipal").innerHTML += "<div class='col-lg-2 col-md-2 col-sm-4 col-xs-6 galeria-imgages back1' ></div>";
+//
+//     // }
+//
+// }
 
 var banner;
 var userimg;
@@ -385,9 +416,14 @@ function uiPortfolioBase() {
 
 
                         if(JSON.parse(sessionStorage.getItem("userIniciado"))){
-
+                            $('#usuario-nombre').val(JSON.parse(sessionStorage.getItem("userIniciado")).name+' '+JSON.parse(sessionStorage.getItem("userIniciado")).surname);
+                            $('#usuario-email').val(JSON.parse(sessionStorage.getItem("userIniciado")).email);
+                            $("#usuario-nombre").attr('disabled','disabled');
+                            $("#usuario-email").attr('disabled','disabled');
                         }else{
-                            // alert("holis");
+
+                            $("#usuario-nombre").attr('disabled','');
+                            $("#usuario-email").attr('disabled','');
                         }
                     })
                     let datos = {metodo:"cargarGaleriaUsuario",iduser:userinfo.iduser};
@@ -435,7 +471,21 @@ function uiPortfolioBase() {
 let query = "SELECT * FROM images i LEFT OUTER JOIN users u ON i.iduser = u.iduser;";
 
 function uiFormularioNuevoTrabajo(){
+    $.post(
+        CONEXIONES,
+        {metodo:"cargarCategorias"},
+        function (data) {
+            if(JSON.parse(data).length){
+                let categorias = JSON.parse(data);
+                let listacategorias  = document.getElementById('category');
+                listacategorias.innerHTML ="";
+                for(let i = 0 ; i < categorias.length ; i++){
+                    listacategorias.innerHTML += "<option value=''>"+categorias[i]['namecategoria']+"</option>";
+                }
+            }
 
+        }
+    )
     $("#formRegistro").submit(function (event) {
         event.preventDefault();
         onclick_subirProyecto();
@@ -481,7 +531,7 @@ function uiProyectoBase(){
 
     $("#idCategoryUser").html("");
     $("#idCategoryUser").html(proyecto.categoryuser);
-    $("#idFechaSubidaProyecto").html("Posted on " + proyecto.date);
+    $("#idFechaSubidaProyecto").html("Publicado el " + proyecto.date);
 
 
 
@@ -581,7 +631,9 @@ function uiMenuNotificaciones() {
                     document.getElementById("idcapalikes").innerHTML += "<div class='row etiquetanotificacion'><div class='col-xs-12   alto50 alinear-vertical'><div class='etiquetanoti alinear-vertical'></div><div class='etiquetanotitexto borde2 alinear-vertical borde2 nopaddingnomargin letras'><span class='capacircularnoti back1' onclick='onclick_cargarPortfolio(`"+resultados[i]['iduserlike']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['userimg']+")'></span>El usuario  <a class='letraverde' onclick='onclick_cargarPortfolio(`"+resultados[i]['iduserlike']+"`)'>&nbsp; "+resultados[i]['username']+" &nbsp; </a> te ha dado like a tu proyecto '<a class='letraverde' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)'>&nbsp; "+resultados[i]['title']+" &nbsp; </a>' </div> <div class='etiquetanotiimagen ' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['image']+")'></div></div></div>";
                 }
             }else{
-                snackbarAlert("Todavía no tienes notificaciones");
+
+                document.getElementById("idcapalikes").innerHTML="Todavía no tienes notificaciones ";
+                // snackbarAlert("Todavía no tienes notificaciones");
             }
         }
     )
@@ -596,7 +648,8 @@ function uiMenuNotificaciones() {
                     document.getElementById("idcapaComments").innerHTML += "<div class='row etiquetanotificacion'><div class='col-xs-12   alto50 alinear-vertical'><div class='etiquetanoti alinear-vertical'></div><div class='etiquetanotitexto borde2 alinear-vertical borde2 nopaddingnomargin letras'><span class='capacircularnoti back1' onclick='onclick_cargarPortfolio(`"+resultados[i]['idusercomment']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['userimg']+")'></span>El usuario  <a class='letraverde' onclick='onclick_cargarPortfolio(`"+resultados[i]['idusercomment']+"`)'>&nbsp; "+resultados[i]['username']+" &nbsp; </a> ha comentado en tu proyecto '<a class='letraverde' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)'>&nbsp; "+resultados[i]['title']+" &nbsp; </a>' </div> <div class='etiquetanotiimagen ' onclick='onclick_cargarProyecto(`"+resultados[i]['idimage']+","+resultados[i]['iduser']+"`)' style='background-position:center; background-size:cover;background-image: url("+resultados[i]['image']+")'></div></div></div>";
                 }
             }else{
-                snackbarAlert("Todavía no tienes notificaciones");
+                document.getElementById("idcapaComments").innerHTML="Todavía no tienes notificaciones ";
+                // snackbarAlert("Todavía no tienes notificaciones");
             }
         }
     )
