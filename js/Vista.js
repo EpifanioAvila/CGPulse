@@ -135,9 +135,6 @@ function uiGaleriaPrincipal() {
         }
     )
 }
-/**
- * Asigno a los botones de POPULARES Y MÁS VISITADOS-
- */
 function uiCuerpoBase() {
 
     let cuerpoBase = document.getElementById("galeriaprincipal");
@@ -151,9 +148,7 @@ function uiCuerpoBase() {
 
         onclick_cargarGaleriaVisitados();
     })
-    /**
-     * por defecto carga la galería de los más populares
-     */
+
     onclick_cargarGaleriaPopulares();
 
 }
@@ -177,9 +172,7 @@ function uiCuerpoBase() {
 
 var banner;
 var userimg;
-/**
- * Evito que al pulsar el botón submit recargue la página, y llamo al método registrar usuario
- */
+
 function uiFormularioRegistro() {
 
     $("#formRegistro").submit(function (event) {
@@ -193,11 +186,7 @@ function uiFormularioRegistro() {
     $('#banner').on("change",uiPrevisualizar);
 
 }
-/**
- * función que se encarga de transformar una imagen a texto en codificación base64 con canvas, esta función se ejecuta al subir un proyecto y al
- * @param im
- * @param key
- */
+
 function uiCodificar(im,key){
     let i=new Image();
 
@@ -217,9 +206,7 @@ function uiCodificar(im,key){
 
                 // console.log(canvas.toDataURL().split('base64,')[1]);
                 // let campo = {name:canvas.toDataURL().split('base64,')[1]}
-                /**
-                 * Controlo el campo desde el que viene para renderizarlo una vez que el usuario la introduzca por el campo tipo file
-                 */
+
                 if(key == "Image"){
                     imageproyect = canvas.toDataURL("image/jpeg",0.7);
                     // console.log("Imrpimiendouserimg")
@@ -258,9 +245,6 @@ function uiCodificar(im,key){
 }
 
 function uiFiltroCategorias() {
-    /**
-     * Obetengo las categorias y las pongo como options en el select de categorías
-     */
     $.post(
         CONEXIONES,
         {metodo:"cargarCategorias"},
