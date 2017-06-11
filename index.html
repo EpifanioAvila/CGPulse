@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>CGPULSE</title>
     <script type="application/javascript" src="libs/jquery/jquery-3.2.1.js"></script>
+    <script type="application/javascript" src="libs/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link rel="stylesheet" href="libs/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script type="application/javascript" src="libs/bootstrap-filestyle-1.2.1/src/bootstrap-filestyle.min.js"></script>
     <link rel="stylesheet" href="libs/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.ttf">
     <script type="application/javascript" src="libs/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="application/javascript" src="js/sh5.js"></script>
-    <script type="application/javascript" src="libs/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
-    <script type="application/javascript" src="libs/bootstrap-filestyle-1.2.1/src/bootstrap-filestyle.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
     <script type="application/javascript" src="js/Control_Comm.js"></script>
     <script type="application/javascript" src="js/Vista.js"></script>
@@ -43,7 +43,7 @@
     <!-- Modal content -->
     <div class="modal-content">
         <div class="modal-header">
-            <span class="close">&times;</span>
+            <!--<span class="close">&times;</span>-->
             <h2 class="letrasverde">Contacto</h2>
         </div>
         <div class="modal-body">
@@ -59,13 +59,35 @@
             <label for="" class="label letras">Mensaje:</label>
             <textarea name="" class="form-control" id="mensaje-contacto" cols="30" rows="5"></textarea>
         </div>
+
         <div class="modal-footer">
             <button class="btn btn-default " id="btn-enviar-mensaje-contacto">Enviar Mensaje</button>
         </div>
     </div>
 
 </div>
-<div class="container-fluid ">
+<div id="myModal2" class="modal letras">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2 class="letrasverde">Terminos y condiciones</h2>
+        </div>
+        <div class="modal-body" id="terminosycondicionestext">
+            <p>
+                <br/>
+                Los usuarios al hacer uso de esta página, se responsabilizan de las imágenes subidas dando por hecho que poseen la autoría de dichas imágenes,
+                <br/>
+                El creador de esta página no se hace responsable de las obras subidas.
+                <br/>
+                Esta página ha sido desarrollada para el proyecto final de grado de Desarrollo de aplicaciónes Web.</p>
+        </div>
+
+    </div>
+</div>
+
+    <div class="container-fluid ">
     <div class="row navmenu">
         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12  altofull alto50 logo " id="logo">
         </div>
@@ -78,8 +100,11 @@
     <div class="row cuerpobase  " id="cuerpoBase">
     </div>
     <div class="row footer" id="footer">
-        <div class="col-xs-12 alto50 text-center  nopaddingnomargin">
+        <div class="col-xs-6 alto50 text-center  nopaddingnomargin">
             <h4 class="alinear-vertical altofull alinear-horizontal nopaddingnomargin colortextofooter letras">&copy;Epifanio Ávila Garillete</h4>
+        </div>
+        <div class="col-xs-6 alto50 text-center  nopaddingnomargin">
+            <h4 class="alinear-vertical altofull alinear-horizontal nopaddingnomargin colortextofooter letras" ><a href="#" class=" letras" id="terminos" style="color: #636363;"> Términos y condiciones de uso</a></h4>
         </div>
     </div>
 </div>

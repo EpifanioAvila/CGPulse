@@ -227,7 +227,7 @@ function uiCodificar(im,key){
                 if(key == "imguser"){
                     userimg = canvas.toDataURL("image/jpeg",0.7);
                     console.log("Imrpimiendouserimg")
-                    console.log(userimg)
+                    // console.log(userimg)
                     document.getElementById("imgprueba2").setAttribute("src",canvas.toDataURL())
                     document.getElementById("imgprueba2").setAttribute("width","100px")
                 }
@@ -479,6 +479,7 @@ function uiFormularioNuevoTrabajo(){
                 let categorias = JSON.parse(data);
                 let listacategorias  = document.getElementById('category');
                 listacategorias.innerHTML ="";
+                listacategorias.innerHTML = "<option value=''>Selecciona una categoria</option>";
                 for(let i = 0 ; i < categorias.length ; i++){
                     listacategorias.innerHTML += "<option value=''>"+categorias[i]['namecategoria']+"</option>";
                 }
@@ -486,11 +487,14 @@ function uiFormularioNuevoTrabajo(){
 
         }
     )
+
+    // console.log("hola" + $('#category option:selected').text());
     $("#formRegistro").submit(function (event) {
         event.preventDefault();
         onclick_subirProyecto();
     });
     // snackbarAlert()("cargando formulario nuevo trabajo");
+    $('#Image').filestyle();
     $('#Image').on('change',uiPrevisualizar);
 
 }
@@ -501,7 +505,7 @@ function uiProyectoBase(){
     $("#idViews").html("");
     $("#idViews").html(proyecto.views);
 
-    $("#btn-aniadirComentario").attr("disabled",true);
+    // $("#btn-aniadirComentario").attr("disabled",true);
 
     $("#idLikes").html("");
     $("#idLikes").html(proyecto.likes);
@@ -555,32 +559,37 @@ function uiProyectoBase(){
             )
         });
 
-        $("#idNuevoComentario").on("change",function () {
-            if( $(this).val().trim()!=""){
-
-                $('#btn-aniadirComentario').removeAttr("disabled");
-            }else{
-
-                $("#btn-aniadirComentario").attr("disabled",true);
-            }
-        });
+        // $("#idNuevoComentario").on("change",function () {
+        //     if( $(this).val().trim()!=""){
+        //
+        //         $('#btn-aniadirComentario').removeAttr("disabled");
+        //     }else{
+        //
+        //         $("#btn-aniadirComentario").attr("disabled",true);
+        //     }
+        // });
         $('#btn-aniadirComentario').on("click",function () {
             let comentario = $("#idNuevoComentario").val();
             // snackbarAlert()("guardando comentario : "+comentario)
-            $.post(
-                CONEXIONES,
-                {metodo:"aniadirComentario",idimage:proyecto.idimage,iduser:user.iduser,comentario:comentario},
-                function (data) {
-                    let respuesta =JSON.parse(data);
-                    if(respuesta == "true"){
+            if(comentario.trim()!=""){
+                $.post(
+                    CONEXIONES,
+                    {metodo:"aniadirComentario",idimage:proyecto.idimage,iduser:user.iduser,comentario:comentario},
+                    function (data) {
+                        let respuesta =JSON.parse(data);
+                        if(respuesta == "true"){
 
-                        let cuerpoBase = document.getElementById("cuerpoBase");
-                        cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
-                    }else{
-                        snackbarAlert("no se ha podido publicar el comentario en estos momentos");
+                            let cuerpoBase = document.getElementById("cuerpoBase");
+                            cargarLayout(cuerpoBase,PROYECTOBASE,uiProyectoBase);
+                        }else{
+                            snackbarAlert("no se ha podido publicar el comentario en estos momentos");
+                        }
                     }
-                }
-            );
+                );
+            }else{
+                snackbarAlert("El comentario no puede ir vacío")
+            }
+
         });
 
 
